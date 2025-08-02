@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore all .log files
+*.log
+
+# Ignore specific file
+config/secret-key.txt
+
+# Ignore all files in a folder
+/tmp/
+
+# Ignore a specific folder
+build/
+
+# Ignore all .env files
+*.env
