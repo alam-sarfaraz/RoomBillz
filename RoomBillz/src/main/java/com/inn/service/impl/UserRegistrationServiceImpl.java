@@ -18,6 +18,7 @@ import com.inn.dto.UserRegistrationDto;
 import com.inn.entity.UserRegistration;
 import com.inn.repository.IUserRegistrationRepository;
 import com.inn.roomConstants.RoomContants;
+import com.inn.roomUtility.RoomUtility;
 import com.inn.service.IUserRegistrationService;
 
 @Service
@@ -36,6 +37,8 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 			if(userDetail.isPresent()) {
 			throw new UserAlreadyExistException("User with username " + userRegistrationDto.getUserName() + " already exists");
 			}
+			RoomUtility.validateEmail(userRegistrationDto.getEmail(), userRegistrationDto.getConfirmEmail());
+			RoomUtility.validatePassword(userRegistrationDto.getPassword(), userRegistrationDto.getConfirmPassword());
 			UserRegistration userRegistrationDb = mapToUserRegistration(userRegistrationDto,new UserRegistration());
 			iUserRegistrationRepository.save(userRegistrationDb);
 			return ResponseEntity.status(HttpStatus.CREATED)
@@ -65,9 +68,9 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 	}
 
 	@Override
-	public UserRegistration findById(Integer id) {
+	public UserRegistration findByUserId(Integer id) {
 		try {
-		logger.info(RoomContants.INSIDE_THE_METHOD + "findById {}",kv("Id",id));
+		logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserId {}",kv("Id",id));
 		UserRegistration userRegistration = iUserRegistrationRepository.findById(id).orElseThrow(()->new UserNotFoundException("User", "Id", id.toString()));
 		return userRegistration;
 		}catch (Exception e) {

@@ -42,19 +42,19 @@ public class UserRegistrationDto {
     @Email(message = "Email should be a valid value")
     private String email;
 
-    @Schema(description = "Confirmation of the primary email", example = "sarfaraz@example.com", required = true)
+    @Schema(description = "Confirmation of the primary email", example = "sarfarazalam@example.com", required = true)
     @NotEmpty(message = "Confirm Email can not be a null or empty")
     @Email(message = "Confirm Email should be a valid value")
     private String confirmEmail;
 
     @Schema(description = "Password", example = "Secret@123", required = true)
     @NotEmpty(message = "password can not be a null or empty")
-    @Size(min = 3, max = 30, message = "The length of password should be between 5 to 30")
+    @Size(min = 8, max = 30, message = "The length of password should be between 5 to 30")
     private String password;
 
     @Schema(description = "Confirmation of the password", example = "Secret@123", required = true)
     @NotEmpty(message = "Confirm Password can not be a null or empty")
-    @Size(min = 3, max = 30, message = "The length of Confirm password should be between 5 to 30")
+    @Size(min = 8, max = 30, message = "The length of Confirm password should be between 5 to 30")
     private String confirmPassword;
 
     @Schema(description = "Date of Birth in YYYY-MM-DD format", example = "1998-02-27")

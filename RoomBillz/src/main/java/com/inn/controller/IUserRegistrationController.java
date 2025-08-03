@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 @Validated
 public interface IUserRegistrationController {
 
-    @Operation(summary = "Register a new user", description = "Create a new user with provided details")
+    @Operation(summary = "Register a new User", description = "Create a new User with provided Detail")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "User registered successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input"),
@@ -43,7 +43,7 @@ public interface IUserRegistrationController {
     @PostMapping(path = "/userRegistration", consumes = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<ResponseDto> userRegistration(@Valid @RequestBody UserRegistrationDto userRegistrationDto);
 
-    @Operation(summary = "Find user by ID", description = "Retrieve a user's details using their ID")
+    @Operation(summary = "Find user by ID", description = "Retrieve a User's Detail using their ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User found"),
         @ApiResponse(responseCode = "404", description = "User not found"),
@@ -79,6 +79,7 @@ public interface IUserRegistrationController {
     @DeleteMapping("/deleteUserById/{id}")
     ResponseEntity<ResponseDto> deleteUserById(@Parameter(description = "User ID") @PathVariable(name = "id") Integer id);
 
+    
     @Operation(summary = "Delete user by username", description = "Delete a user using their username")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User deleted successfully"),
@@ -104,5 +105,6 @@ public interface IUserRegistrationController {
     ResponseEntity<ResponseDto> updateUserByUserName(
         @Parameter(description = "Username to update") @RequestParam(name = "userName") String userName,
         @RequestBody UserRegistrationDto userRegistrationDto);
+
 }
 

@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -80,6 +79,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		errorResponseDto.setApipath(webRequest.getDescription(false));
 		errorResponseDto.setErrorCode(HttpStatus.BAD_REQUEST);
 		errorResponseDto.setErrorMessage(groupAlreadyExistException.getMessage());
+		errorResponseDto.setErrorTime(LocalDateTime.now());
+		return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(GroupNotFoundException.class)
+	public ResponseEntity<ErrorResponseDto> handleGroupNotFoundException(GroupNotFoundException groupNotFoundException,WebRequest webRequest){
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+		errorResponseDto.setApipath(webRequest.getDescription(false));
+		errorResponseDto.setErrorCode(HttpStatus.BAD_REQUEST);
+		errorResponseDto.setErrorMessage(groupNotFoundException.getMessage());
+		errorResponseDto.setErrorTime(LocalDateTime.now());
+		return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RoomBillzException.class)
+	public ResponseEntity<ErrorResponseDto> handleRoomBillzException(RoomBillzException roomBillzException,WebRequest webRequest){
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+		errorResponseDto.setApipath(webRequest.getDescription(false));
+		errorResponseDto.setErrorCode(HttpStatus.BAD_REQUEST);
+		errorResponseDto.setErrorMessage(roomBillzException.getMessage());
 		errorResponseDto.setErrorTime(LocalDateTime.now());
 		return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
 	}

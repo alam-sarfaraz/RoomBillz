@@ -10,7 +10,7 @@ public interface IUserRegistrationService {
 
 	public ResponseEntity<ResponseDto> userRegistration(UserRegistrationDto userRegistrationDto);
 	
-	public  UserRegistration findById(Integer id);
+	public  UserRegistration findByUserId(Integer id);
 	
 	public UserRegistration findByUserName(String userName);
 	

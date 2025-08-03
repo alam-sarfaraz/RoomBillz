@@ -40,7 +40,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	  public ResponseEntity<UserRegistration> findByUserId(@PathVariable Integer id) {
 		  try {
 		  logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserId {}",kv("Id",id));
-		  UserRegistration userRegistation = iUserRegistrationService.findById(id);
+		  UserRegistration userRegistation = iUserRegistrationService.findByUserId(id);
 	         return ResponseEntity.status(HttpStatus.OK)
 	 				.body(userRegistation);
 	  }catch (Exception e) {
