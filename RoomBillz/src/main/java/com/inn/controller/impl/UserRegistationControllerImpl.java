@@ -14,6 +14,7 @@ import com.inn.controller.IUserRegistrationController;
 import com.inn.dto.ResponseDto;
 import com.inn.dto.UserRegistrationDto;
 import com.inn.entity.UserRegistration;
+import com.inn.logs.LogRequestResponse;
 import com.inn.roomConstants.RoomContants;
 import com.inn.service.IUserRegistrationService;
 
@@ -26,6 +27,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	IUserRegistrationService iUserRegistrationService;
 	
 	@Override
+	@LogRequestResponse
 	public ResponseEntity<ResponseDto> userRegistration(UserRegistrationDto userRegistrationDto) {
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "userRegistration {}", kv("UserRegistrationDto",userRegistrationDto));
@@ -37,6 +39,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	}
 	
 	  @Override
+	  @LogRequestResponse
 	  public ResponseEntity<UserRegistration> findByUserId(@PathVariable Integer id) {
 		  try {
 		  logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserId {}",kv("Id",id));
@@ -50,7 +53,8 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	  }
 	  
 	  @Override
-		public ResponseEntity<UserRegistration> findByUserName(String userName) {
+	  @LogRequestResponse
+	  public ResponseEntity<UserRegistration> findByUserName(String userName) {
 			try {
 				logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserName {}",kv("UserName", userName));
 				UserRegistration userRegistation = iUserRegistrationService.findByUserName(userName);
@@ -62,6 +66,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		}
 	  
 		@Override
+		@LogRequestResponse
 		public ResponseEntity<ResponseDto> deleteUserById(@PathVariable Integer id) {
 			try {
 				logger.info(RoomContants.INSIDE_THE_METHOD + "deleteUserById {}",kv("Id:", id));
@@ -74,6 +79,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 
 
 		@Override
+		@LogRequestResponse
 		public ResponseEntity<ResponseDto> deleteByUserName(String userName) {
 			try {
 				logger.info(RoomContants.INSIDE_THE_METHOD + "deleteByUserName {}",kv("UserName", userName));
@@ -85,6 +91,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		}
 
 		@Override
+		@LogRequestResponse
 		public ResponseEntity<ResponseDto> updateUserByUserName(String userName,UserRegistrationDto userRegistrationDto) {
 			try {
 				logger.info(RoomContants.INSIDE_THE_METHOD + "updateUserByUserName {}", kv("UserName",userName),kv("UserRegistrationDto",userRegistrationDto));
