@@ -40,10 +40,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	
 	  @Override
 	  @LogRequestResponse
-	  public ResponseEntity<UserRegistration> findByUserId(@PathVariable Integer id) {
+	  public ResponseEntity<UserRegistration> findById(Integer id) {
 		  try {
-		  logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserId {}",kv("Id",id));
-		  UserRegistration userRegistation = iUserRegistrationService.findByUserId(id);
+		  logger.info(RoomContants.INSIDE_THE_METHOD + "findById {}",kv("Id",id));
+		  UserRegistration userRegistation = iUserRegistrationService.findById(id);
 	         return ResponseEntity.status(HttpStatus.OK)
 	 				.body(userRegistation);
 	  }catch (Exception e) {
@@ -67,7 +67,7 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	  
 		@Override
 		@LogRequestResponse
-		public ResponseEntity<ResponseDto> deleteUserById(@PathVariable Integer id) {
+		public ResponseEntity<ResponseDto> deleteUserById(Integer id) {
 			try {
 				logger.info(RoomContants.INSIDE_THE_METHOD + "deleteUserById {}",kv("Id:", id));
 				return iUserRegistrationService.deleteUserById(id); 
@@ -101,5 +101,19 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 				throw e;
 			}
 		}
+		
+		 @Override
+		  @LogRequestResponse
+		  public ResponseEntity<UserRegistration> findUserDetailByUserId(String userId) {
+			  try {
+			  logger.info(RoomContants.INSIDE_THE_METHOD + "findUserDetailByUserId {}",kv("userId",userId));
+			  UserRegistration userRegistation = iUserRegistrationService.findUserDetailByUserId(userId);
+		         return ResponseEntity.status(HttpStatus.OK)
+		 				.body(userRegistation);
+		  }catch (Exception e) {
+			  logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				throw e;
+			}
+		  }
 	
  }

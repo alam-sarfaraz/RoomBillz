@@ -52,8 +52,8 @@ public interface IUserRegistrationController {
         		schema = @Schema(implementation = ErrorResponseDto.class)
         		)), 
     })
-    @GetMapping(path = "/findByUserId")
-    ResponseEntity<UserRegistration> findByUserId(@Parameter(description = "User ID") @RequestParam(name = "id") Integer id);
+    @GetMapping(path = "/findById")
+    ResponseEntity<UserRegistration> findById(@Parameter(description = "ID") @RequestParam(name = "id") Integer id);
 
     @Operation(summary = "Find user by username", description = "Retrieve user details using their username")
     @ApiResponses(value = {
@@ -101,10 +101,23 @@ public interface IUserRegistrationController {
         		schema = @Schema(implementation = ErrorResponseDto.class)
         		)), 
     })
+    
     @PutMapping(path = "/updateUserByUserName", consumes = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<ResponseDto> updateUserByUserName(
         @Parameter(description = "Username to update") @RequestParam(name = "userName") String userName,
         @RequestBody UserRegistrationDto userRegistrationDto);
+    
+    @Operation(summary = "Find user by userId", description = "Retrieve a User's Detail using their UserId")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found"),
+        @ApiResponse(responseCode = "404", description = "User not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+    @GetMapping(path = "/findUserDetailByUserId")
+    ResponseEntity<UserRegistration> findUserDetailByUserId(@Parameter(description = "UserId") @RequestParam(name = "UserId") String UserId);
 
 }
 

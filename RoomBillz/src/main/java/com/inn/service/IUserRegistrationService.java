@@ -10,7 +10,7 @@ public interface IUserRegistrationService {
 
 	public ResponseEntity<ResponseDto> userRegistration(UserRegistrationDto userRegistrationDto);
 	
-	public  UserRegistration findByUserId(Integer id);
+	public  UserRegistration findById(Integer id);
 	
 	public UserRegistration findByUserName(String userName);
 	
@@ -19,6 +19,8 @@ public interface IUserRegistrationService {
 	public ResponseEntity<ResponseDto> deleteByUserName(String userName);
 
 	public ResponseEntity<ResponseDto> updateUserByUserName(String userName, UserRegistrationDto userRegistrationDto);
+
+	public UserRegistration findUserDetailByUserId(String userId);
 
 
 }

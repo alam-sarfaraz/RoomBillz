@@ -16,4 +16,6 @@ public interface IUserRegistrationRepository extends JpaRepository<UserRegistrat
 	
 	Optional<UserRegistration> findByMobileNumber(String mobileNumber);
 
+	Optional<UserRegistration> findByUserId(String userId);
+
 }

@@ -2,6 +2,8 @@ package com.inn.roomUtility;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.inn.customException.RoomBillzException;
 
 public class RoomUtility {
@@ -10,6 +12,18 @@ public class RoomUtility {
 		Random random = new Random();
 		int number = random.nextInt(100000);
 		return String.format("GR-%05d", number);
+	}
+	
+	public static String generateUserId(String firstName,String lastName) {
+		if(StringUtils.isNotEmpty(firstName) && StringUtils.isNotEmpty(lastName)) {
+			String first = firstName.substring(0, 4).toLowerCase();
+			String last = lastName.substring(0, 4).toLowerCase();
+			return first+last;
+		}else {
+			Random random = new Random();
+			int number = random.nextInt(100000);
+			return String.format("USER-%05d", number);
+		}
 	}
 
 

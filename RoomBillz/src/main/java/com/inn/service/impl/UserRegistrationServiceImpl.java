@@ -52,6 +52,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 	public UserRegistration mapToUserRegistration(UserRegistrationDto userRegistrationDto,UserRegistration userRegistration){
 		logger.info(RoomContants.INSIDE_THE_METHOD + "mapToUserRegistration {}",kv("UserRegistrationDto",userRegistrationDto));
 		userRegistration.setUserName(userRegistrationDto.getUserName());
+		userRegistration.setUserId(RoomUtility.generateUserId(userRegistrationDto.getFirstName(), userRegistrationDto.getLastName()));
 		userRegistration.setFirstName(userRegistrationDto.getFirstName());
 		userRegistration.setMiddleName(userRegistrationDto.getMiddleName());
 		userRegistration.setLastName(userRegistrationDto.getLastName());
@@ -68,9 +69,9 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 	}
 
 	@Override
-	public UserRegistration findByUserId(Integer id) {
+	public UserRegistration findById(Integer id) {
 		try {
-		logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserId {}",kv("Id",id));
+		logger.info(RoomContants.INSIDE_THE_METHOD + "findById {}",kv("Id",id));
 		UserRegistration userRegistration = iUserRegistrationRepository.findById(id).orElseThrow(()->new UserNotFoundException("User", "Id", id.toString()));
 		return userRegistration;
 		}catch (Exception e) {
@@ -137,5 +138,16 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 					throw e;
 				}
 			}
+		
+		public UserRegistration findUserDetailByUserId(String userId) {
+			try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserDetailByUserId {}",kv("userId",userId));
+			UserRegistration userRegistration = iUserRegistrationRepository.findByUserId(userId.toLowerCase()).orElseThrow(()->new UserNotFoundException("UserId", "userId", userId.toLowerCase()));
+			return userRegistration;
+			}catch (Exception e) {
+				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				throw e;
+			}
+		}
 
 }
