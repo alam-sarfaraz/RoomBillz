@@ -102,6 +102,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		errorResponseDto.setErrorTime(LocalDateTime.now());
 		return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(DuplicateResourceException.class)
+	public ResponseEntity<ErrorResponseDto> handleDuplicateResourceException(DuplicateResourceException duplicateResourceException,WebRequest webRequest){
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+		errorResponseDto.setApipath(webRequest.getDescription(false));
+		errorResponseDto.setErrorCode(HttpStatus.BAD_REQUEST);
+		errorResponseDto.setErrorMessage(duplicateResourceException.getMessage());
+		errorResponseDto.setErrorTime(LocalDateTime.now());
+		return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
+	}
 
 	
 }
