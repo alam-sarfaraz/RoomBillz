@@ -2,6 +2,8 @@ package com.inn.service.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.inn.customException.DuplicateResourceException;
 import com.inn.customException.RoomBillzException;
+import com.inn.customException.UserAndGroupException;
 import com.inn.dto.ResponseDto;
 import com.inn.dto.UserGroupRegistrationDto;
 import com.inn.entity.GroupDetail;
@@ -45,11 +48,11 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
 			
-			boolean userExists = iUserGroupDetailMappingRepository.existsByUserName(userGroupRegistrationDto.getUserName());
-	        boolean groupExists = iGroupDetailMappingRepository.existsByGroupName(userGroupRegistrationDto.getGroupName());
-	        
-	        if (userExists && groupExists) {
-	        throw new DuplicateResourceException(userGroupRegistrationDto.getUserName(),userGroupRegistrationDto.getGroupName());
+			Optional<UserGroupDetailMapping> userGroupDetailMapping = iUserGroupDetailMappingRepository.findByUserNameAndGroupDetailMapping_GroupName(userGroupRegistrationDto.getUserName(),userGroupRegistrationDto.getGroupName());
+			logger.info("UserGroupDetailMapping Data {}", kv("UserGroupDetailMapping",userGroupDetailMapping));
+			
+	        if (!userGroupDetailMapping.isEmpty()) {
+	                throw new DuplicateResourceException(userGroupRegistrationDto.getUserName(),userGroupRegistrationDto.getGroupName());
 	        }
 	        
 			UserRegistration userRegistration = iUserRegistrationService.findByUserName(userGroupRegistrationDto.getUserName());
@@ -79,6 +82,20 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ResponseDto("201", "User Register in group Successfully..."));
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(String userName,
+			String groupName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}", kv("userName",userName), kv("groupName",groupName));
+			 UserGroupDetailMapping detailMapping = iUserGroupDetailMappingRepository.findByUserNameAndGroupDetailMapping_GroupName(userName,groupName).orElseThrow(()-> new UserAndGroupException(userName,groupName));
+			 return ResponseEntity.status(HttpStatus.OK)
+						.body(detailMapping);
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;

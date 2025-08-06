@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inn.controller.IUserGroupRegistrationController;
 import com.inn.dto.ResponseDto;
 import com.inn.dto.UserGroupRegistrationDto;
+import com.inn.entity.UserGroupDetailMapping;
 import com.inn.logs.LogRequestResponse;
 import com.inn.roomConstants.RoomContants;
 import com.inn.service.IUserGroupRegistrationService;
@@ -29,6 +30,18 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
 			return iUserGroupRegistrationService.registerUserWithGroup(userGroupRegistrationDto);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(String userName,String groupName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}", kv("userName",userName), kv("groupName",groupName));
+			return iUserGroupRegistrationService.findUserGroupDetailByUserAndGroupName(userName,groupName);
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
