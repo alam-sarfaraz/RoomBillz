@@ -2,6 +2,7 @@ package com.inn.service.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.inn.customException.GroupAlreadyExistException;
 import com.inn.customException.GroupNotFoundException;
+import com.inn.customException.RoomBillzException;
 import com.inn.dto.GroupDetailDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.GroupDetail;
@@ -110,6 +112,21 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			iGroupDetailRepository.deleteById(groupDetail.getId());
 			return ResponseEntity.status(HttpStatus.OK)
 					             .body(new ResponseDto("200", "Group Deleted Successfully..."));
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<GroupDetail>> findAllGroupDetail() {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findAllGroupDetail ");
+			List<GroupDetail> groupDetailList = iGroupDetailRepository.findAll();
+			if (groupDetailList == null || groupDetailList.isEmpty()) {
+				throw new RoomBillzException("No groups are present.");
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(groupDetailList);
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;

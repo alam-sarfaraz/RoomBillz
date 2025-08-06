@@ -2,6 +2,7 @@ package com.inn.service.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.inn.customException.RoomBillzException;
 import com.inn.customException.UserAlreadyExistException;
 import com.inn.customException.UserNotFoundException;
 import com.inn.dto.ResponseDto;
@@ -33,12 +35,20 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 	public ResponseEntity<ResponseDto> userRegistration(UserRegistrationDto userRegistrationDto) {
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "userRegistration",kv("UserRegistrationDto",userRegistrationDto));
-			Optional<UserRegistration> userDetail = iUserRegistrationRepository.findByUserName(userRegistrationDto.getUserName());
-			if(userDetail.isPresent()) {
-			throw new UserAlreadyExistException("User with username " + userRegistrationDto.getUserName() + " already exists");
-			}
+			
 			RoomUtility.validateEmail(userRegistrationDto.getEmail(), userRegistrationDto.getConfirmEmail());
 			RoomUtility.validatePassword(userRegistrationDto.getPassword(), userRegistrationDto.getConfirmPassword());
+			
+			Optional<UserRegistration> userDetail = iUserRegistrationRepository.findByUserName(userRegistrationDto.getUserName());
+			if(userDetail.isPresent()) {
+			   throw new UserAlreadyExistException("User with Username " + userRegistrationDto.getUserName() + " already exists");
+			}
+			
+			Optional<UserRegistration> userDetailEmail = iUserRegistrationRepository.findByEmail(userRegistrationDto.getEmail());
+			if (userDetailEmail.isPresent()) {
+				throw new UserAlreadyExistException("User with Email " + userRegistrationDto.getEmail() + " already exists");
+			}
+			
 			UserRegistration userRegistrationDb = mapToUserRegistration(userRegistrationDto,new UserRegistration());
 			iUserRegistrationRepository.save(userRegistrationDb);
 			return ResponseEntity.status(HttpStatus.CREATED)
@@ -146,6 +156,34 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 			return userRegistration;
 			}catch (Exception e) {
 				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				throw e;
+			}
+		}
+
+		@Override
+		public ResponseEntity<List<UserRegistration>> findAllUserDetil() {
+			try {
+				logger.info(RoomContants.INSIDE_THE_METHOD + "findAllUserDetil ");
+				List<UserRegistration> userRegistration = iUserRegistrationRepository.findAll();
+				if (userRegistration != null && userRegistration.isEmpty()) {
+					throw new RoomBillzException("No User are present.");
+				}
+				return ResponseEntity.status(HttpStatus.OK).body(userRegistration);
+			} catch (Exception e) {
+				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+				throw e;
+			}
+		}
+
+		@Override
+		public ResponseEntity<UserRegistration> findUserDetailByEmail(String email) {
+			try {
+				logger.info(RoomContants.INSIDE_THE_METHOD + "findUserDetailByEmail {}", kv("Email", email));
+				UserRegistration userRegistration = iUserRegistrationRepository.findByEmail(email)
+						.orElseThrow(() -> new UserNotFoundException("Email", "Email", email));
+				return ResponseEntity.status(HttpStatus.OK).body(userRegistration);
+			} catch (Exception e) {
+				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}

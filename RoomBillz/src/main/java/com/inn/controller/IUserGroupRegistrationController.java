@@ -1,5 +1,7 @@
 package com.inn.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -53,6 +55,45 @@ public interface IUserGroupRegistrationController {
     @GetMapping(path = "/findUserGroupDetailByUserAndGroupName")
     ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(@Parameter(description = "Username") @RequestParam(name = "userName") String userName,
     		                                                                     @Parameter(description = "GroupName") @RequestParam(name = "groupName") String groupName); 
+	
+	
+	@Operation(summary = "Find UserGroupDetailMapping by userName", description = "Retrieve UserGroupDetailMapping using their userName")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "UserGroupDetailMapping found"),
+        @ApiResponse(responseCode = "404", description = "UserGroupDetailMapping not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+    @GetMapping(path = "/findUserGroupDetailByUsername")
+    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByUsername(@Parameter(description = "Username") @RequestParam(name = "userName") String userName);
+	
+	
+	@Operation(summary = "Find UserGroupDetailMapping by groupName", description = "Retrieve UserGroupDetailMapping using their groupName")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "UserGroupDetailMapping found"),
+        @ApiResponse(responseCode = "404", description = "UserGroupDetailMapping not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+    @GetMapping(path = "/findUserGroupDetailByGroupName")
+    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByGroupName(@Parameter(description = "GroupName") @RequestParam(name = "groupName") String groupName);
+	
+	
+	@Operation(summary = "Find UserGroupDetailMapping by Email", description = "Retrieve UserGroupDetailMapping using their Email")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "UserGroupDetailMapping found"),
+        @ApiResponse(responseCode = "404", description = "UserGroupDetailMapping not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+    @GetMapping(path = "/findUserGroupDetailByEmail")
+    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(@Parameter(description = "Email") @RequestParam(name = "email") String email);
 	
 	
 

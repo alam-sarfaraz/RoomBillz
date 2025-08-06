@@ -11,20 +11,22 @@ public class RoomUtility {
 	public static String generateCode() {
 		Random random = new Random();
 		int number = random.nextInt(100000);
-		return String.format("GR-%05d", number);
+		return String.format("GRP-%05d", number);
 	}
 	
-	public static String generateUserId(String firstName,String lastName) {
-		if(StringUtils.isNotEmpty(firstName) && StringUtils.isNotEmpty(lastName)) {
-			String first = firstName.substring(0, 4).toLowerCase();
-			String last = lastName.substring(0, 4).toLowerCase();
-			return first+last;
-		}else {
-			Random random = new Random();
-			int number = random.nextInt(100000);
-			return String.format("USER-%05d", number);
-		}
+	public static String generateUserId(String firstName, String lastName) {
+	    Random random = new Random();
+	    int number = random.nextInt(100000);
+
+	    if (StringUtils.isNotEmpty(firstName) && StringUtils.isNotEmpty(lastName)) {
+	        String first = firstName.length() >= 4 ? firstName.substring(0, 4).toLowerCase() : firstName.toLowerCase();
+	        String last = lastName.length() >= 4 ? lastName.substring(0, 4).toLowerCase() : lastName.toLowerCase();
+	        return first + last + String.format("%05d", number);
+	    } else {
+	        return String.format("USER-%05d", number);
+	    }
 	}
+
 
 
 	public static void validateEmail(String email, String confirmEmail) {

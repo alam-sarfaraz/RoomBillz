@@ -2,6 +2,8 @@ package com.inn.controller.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +83,19 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "deleteByUserName {}", kv("UserName", groupName));
 			return iGroupDetailService.deleteByGroupName(groupName);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<List<GroupDetail>> findAllGroupDetail() {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findAllGroupDetail ");
+			return iGroupDetailService.findAllGroupDetail();
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;

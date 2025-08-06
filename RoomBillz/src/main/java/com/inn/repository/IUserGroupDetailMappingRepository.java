@@ -1,5 +1,6 @@
 package com.inn.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,12 @@ public interface IUserGroupDetailMappingRepository extends JpaRepository<UserGro
 	boolean existsByUserName(String userName);
 	
 	Optional<UserGroupDetailMapping> findByUserNameAndGroupDetailMapping_GroupName(String userName, String groupName);
+	
+	List<UserGroupDetailMapping> findByUserName(String userName);
+	
+	List<UserGroupDetailMapping> findByGroupDetailMapping_GroupName(String groupName);
+	
+	List<UserGroupDetailMapping> findByEmail(String email);
 
 
 

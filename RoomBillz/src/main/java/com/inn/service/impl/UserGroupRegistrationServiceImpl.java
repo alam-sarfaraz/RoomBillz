@@ -2,6 +2,7 @@ package com.inn.service.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.inn.customException.DuplicateResourceException;
 import com.inn.customException.RoomBillzException;
 import com.inn.customException.UserAndGroupException;
+import com.inn.customException.UserNotFoundException;
 import com.inn.dto.ResponseDto;
 import com.inn.dto.UserGroupRegistrationDto;
 import com.inn.entity.GroupDetail;
@@ -92,12 +94,62 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 	public ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(String userName,
 			String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}", kv("userName",userName), kv("groupName",groupName));
-			 UserGroupDetailMapping detailMapping = iUserGroupDetailMappingRepository.findByUserNameAndGroupDetailMapping_GroupName(userName,groupName).orElseThrow(()-> new UserAndGroupException(userName,groupName));
-			 return ResponseEntity.status(HttpStatus.OK)
-						.body(detailMapping);
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}",
+					kv("userName", userName), kv("groupName", groupName));
+			UserGroupDetailMapping detailMapping = iUserGroupDetailMappingRepository
+					.findByUserNameAndGroupDetailMapping_GroupName(userName, groupName)
+					.orElseThrow(() -> new UserAndGroupException(userName, groupName));
+			return ResponseEntity.status(HttpStatus.OK).body(detailMapping);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByUsername(String userName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUsername {}", kv("userName", userName));
+			List<UserGroupDetailMapping> userGroupDetailMappingList = iUserGroupDetailMappingRepository
+					.findByUserName(userName);
+			if (userGroupDetailMappingList != null && userGroupDetailMappingList.isEmpty()) {
+				throw new UserNotFoundException("Username", "Username", userName);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByGroupName(String groupName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByGroupName {}",
+					kv("GroupName", groupName));
+			List<UserGroupDetailMapping> userGroupDetailMappingList = iUserGroupDetailMappingRepository
+					.findByGroupDetailMapping_GroupName(groupName);
+			if (userGroupDetailMappingList != null && userGroupDetailMappingList.isEmpty()) {
+				throw new UserNotFoundException("GroupName", "GroupName", groupName);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(String email) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByEmail {}", kv("Email", email));
+			List<UserGroupDetailMapping> userGroupDetailMappingList = iUserGroupDetailMappingRepository.findByEmail(email);
+			if (userGroupDetailMappingList != null && userGroupDetailMappingList.isEmpty()) {
+				throw new UserNotFoundException("Email", "Email", email);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}

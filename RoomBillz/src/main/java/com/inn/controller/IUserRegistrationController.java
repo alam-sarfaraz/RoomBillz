@@ -1,5 +1,7 @@
 package com.inn.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -107,6 +109,7 @@ public interface IUserRegistrationController {
         @Parameter(description = "Username to update") @RequestParam(name = "userName") String userName,
         @RequestBody UserRegistrationDto userRegistrationDto);
     
+    
     @Operation(summary = "Find user by userId", description = "Retrieve a User's Detail using their UserId")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "User found"),
@@ -118,6 +121,31 @@ public interface IUserRegistrationController {
     })
     @GetMapping(path = "/findUserDetailByUserId")
     ResponseEntity<UserRegistration> findUserDetailByUserId(@Parameter(description = "UserId") @RequestParam(name = "UserId") String UserId);
+    
+    @Operation(summary = "Find All User", description = "Retrieve all User's Detail")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found"),
+        @ApiResponse(responseCode = "404", description = "User not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+    @GetMapping(path = "/findAllUserDetil")
+    ResponseEntity<List<UserRegistration>> findAllUserDetil();
+    
+    @Operation(summary = "Find user by Email", description = "Retrieve a User's Detail using their Email")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found"),
+        @ApiResponse(responseCode = "404", description = "User not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+    @GetMapping(path = "/findUserDetailByEmail")
+    ResponseEntity<UserRegistration> findUserDetailByEmail(@Parameter(description = "Email") @RequestParam(name = "Email") String email);
+    
 
 }
 

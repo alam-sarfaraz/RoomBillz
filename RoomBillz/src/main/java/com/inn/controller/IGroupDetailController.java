@@ -1,5 +1,7 @@
 package com.inn.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import com.inn.dto.ErrorResponseDto;
 import com.inn.dto.GroupDetailDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.GroupDetail;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -90,4 +93,16 @@ public interface IGroupDetailController {
     })
     @DeleteMapping("/deleteByGroupName")
     ResponseEntity<ResponseDto> deleteByGroupName(@Parameter(description = "Groupname") @RequestParam(name = "groupName") String groupName);
+    
+    @Operation(summary = "Find All Group Detail", description = "Retrieve all Group Detail")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Group Detail found"),
+        @ApiResponse(responseCode = "404", description = "Group Detail not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+	@GetMapping(path = "/findAllGroupDetail")
+    ResponseEntity<List<GroupDetail>> findAllGroupDetail();
 }

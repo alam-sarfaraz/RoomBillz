@@ -1,5 +1,7 @@
 package com.inn.service;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
 import com.inn.dto.ResponseDto;
@@ -21,6 +23,10 @@ public interface IUserRegistrationService {
 	public ResponseEntity<ResponseDto> updateUserByUserName(String userName, UserRegistrationDto userRegistrationDto);
 
 	public UserRegistration findUserDetailByUserId(String userId);
+
+	public ResponseEntity<List<UserRegistration>> findAllUserDetil();
+
+	public ResponseEntity<UserRegistration> findUserDetailByEmail(String email);
 
 
 }
