@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.inn.customException.RoomBillzException;
+import com.inn.dto.LineItemDetailDto;
 import com.inn.dto.PurchaseOrderDetailDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.GroupDetail;
@@ -84,7 +86,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			
 			// Creating PurchaseOrderDetail.
 			PurchaseOrderDetail purchaseOrderDetail = new PurchaseOrderDetail();
-			purchaseOrderDetail.setPurchaseId("");
+			purchaseOrderDetail.setPurchaseId(generatePurchaseOrderId());
 			purchaseOrderDetail.setPurchaseDate(purchaseOrderDetailDto.getPurchaseDate());
 			purchaseOrderDetail.setUserName(purchaseOrderDetailDto.getUserName());
 			purchaseOrderDetail.setUserId(userRegistration.getUserId());
@@ -95,8 +97,9 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			purchaseOrderDetail.setMobileNumber(userRegistration.getMobileNumber());
 			purchaseOrderDetail.setGroupId(groupDetail.getGroupId());
 			purchaseOrderDetail.setGroupName(groupDetail.getGroupName());
-			purchaseOrderDetail.setStatus("Pending");
-			purchaseOrderDetail.setModeOfPayment(purchaseOrderDetail.getModeOfPayment());
+			purchaseOrderDetail.setStatus(RoomContants.PENDING);
+			purchaseOrderDetail.setTotalPrice(getTotalPrice(purchaseOrderDetailDto.getItemDetails()));
+			purchaseOrderDetail.setModeOfPayment(purchaseOrderDetailDto.getModeOfPayment());
 			purchaseOrderDetail.setMonth(purchaseOrderDetailDto.getPurchaseDate().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
 			
 			// Creating LineItemDetail.
@@ -122,7 +125,20 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			throw e;
 		}
 	}
-		
+	
+	// Generate Purchase Id
+	public String generatePurchaseOrderId() {
+        Integer maxId = iPurchaseOrderDetailRepository.findMaxId();
+        int nextId = (maxId == null ? 1 : maxId + 1);
+        return String.format("PO-%05d", nextId);
+    }
+	
+	// Total Price
+	public Double getTotalPrice(List<LineItemDetailDto> itemDetails) {
+		return itemDetails.stream().map(e->e.getItemPrice()).collect(Collectors.summingDouble(e->e));
+	}
+	
+	// Create Invoice Detail
 	public List<InvoiceDetail> setInvoiceFileDetails(List<MultipartFile> files, PurchaseOrderDetail purchaseOrderDetail) {
 	    try {
 	        logger.info(RoomContants.INSIDE_THE_METHOD + "SetInvoiceFileDetails");
@@ -167,7 +183,6 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	            invoiceDetail.setFileSize(file.getSize());
 	            invoiceDetail.setExtension(extension);
 	            invoiceDetail.setPurchaseOrder(purchaseOrderDetail);
-
 	            invoiceDetailList.add(invoiceDetail);
 	        }
 
