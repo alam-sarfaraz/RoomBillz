@@ -1,5 +1,6 @@
 package com.inn.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,15 @@ public interface IPurchaseOrderDetailRepository extends JpaRepository<PurchaseOr
 	PurchaseOrderDetail findByPurchaseId(String purchaseId);
 
 	List<PurchaseOrderDetail> findByMonth(String month);
+
+	List<PurchaseOrderDetail> findByUserNameAndGroupName(String userName, String groupName);
+
+	List<PurchaseOrderDetail> findByPurchaseDate(LocalDate date);
+
+	PurchaseOrderDetail findByUserNameAndPurchaseId(String userName, String purchaseId);
+
+	List<PurchaseOrderDetail> findByUserNameAndPurchaseDate(String userName, LocalDate date);
+
+	List<PurchaseOrderDetail> findByUserNameAndGroupNameAndPurchaseDate(String userName,String groupName, LocalDate date);
 
 }

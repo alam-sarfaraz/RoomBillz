@@ -2,6 +2,7 @@ package com.inn.controller.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -110,6 +111,68 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByMonth {}",kv("month", month));
 			return iPurchaseOrderDetailService.findPurchaseOrderDetailByMonth(month);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+	
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByDate(LocalDate date) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByDate {}",kv("Date", date));
+			return iPurchaseOrderDetailService.findPurchaseOrderDetailByDate(date);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupName(String userName,String groupName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupName {}",kv("UserName", userName),kv("GroupName", groupName));
+			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndGroupName(userName,groupName);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrdByUserAndPurchaseId(String userName, String purchaseId) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndPurchaseId {}",kv("UserName", userName),kv("purchaseId", purchaseId));
+			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndPurchaseId(userName,purchaseId);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserNameAndDate(String userName, LocalDate date) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserNameAndDate {}",kv("UserName", userName),kv("Date", date));
+			return iPurchaseOrderDetailService.findPurchaseOrdByUserNameAndDate(userName,date);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupAndDate(String userName,String groupName, LocalDate date) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupAndDate {}",kv("UserName", userName),kv("GroupName", groupName),kv("Date", date));
+			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndGroupAndDate(userName,groupName,date);
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;

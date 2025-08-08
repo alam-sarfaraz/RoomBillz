@@ -1,5 +1,6 @@
 package com.inn.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.MediaType;
@@ -123,6 +124,74 @@ public interface IPurchaseOrderDetailController {
     })
 	@GetMapping(path = "/findPurchaseOrderDetailByMonth")
     ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByMonth(@Parameter(description = "Month",example = "August") @RequestParam(name = "month") String month);
+	
+	@Operation(summary = "Find Purchase Order Details by Date", description = "Retrieve a Purchase Order Details using their Date")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Purchase Order Detail found"),
+        @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+	@GetMapping(path = "/findPurchaseOrderDetailByDate")
+    ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByDate(@Parameter(description = "Date",example = "2025-08-06") @RequestParam(name = "date") LocalDate date);
+	
+	
+	@Operation(summary = "Find Purchase Order Details by UserName and GroupName", description = "Retrieve a Purchase Order Details using their UserName and GroupName")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Purchase Order Detail found"),
+        @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+	@GetMapping(path = "/findPurchaseOrdByUserAndGroupName")
+    ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupName(@Parameter(description = "UserName",example = "sarfarazalam") @RequestParam(name = "userName") String userName,
+    		                                                                    @Parameter(description = "GroupName",example = "RoomBillz") @RequestParam(name = "groupName") String groupName);
+	
+	@Operation(summary = "Find Purchase Order Details by UserName and PurchaseId", description = "Retrieve a Purchase Order Details using their UserName and PurchaseId")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Purchase Order Detail found"),
+        @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+	@GetMapping(path = "/findPurchaseOrdByUserAndPurchaseId")
+    ResponseEntity<PurchaseOrderDetail> findPurchaseOrdByUserAndPurchaseId(@Parameter(description = "UserName",example = "sarfarazalam") @RequestParam(name = "userName") String userName,
+    		                                                               @Parameter(description = "PurchaseId",example = "PO-00002") @RequestParam(name = "purchaseId") String purchaseId);
+	
+	@Operation(summary = "Find Purchase Order Details by UserName and Date", description = "Retrieve a Purchase Order Details using their UserName and Date")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Purchase Order Detail found"),
+        @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+	@GetMapping(path = "/findPurchaseOrdByUserNameAndDate")
+    ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserNameAndDate(@Parameter(description = "UserName",example = "sarfarazalam") @RequestParam(name = "userName") String userName,
+    		                                                             @Parameter(description = "Date",example = "2025-08-06") @RequestParam(name = "date") LocalDate date);
+	
+	@Operation(summary = "Find Purchase Order Details by UserName and GroupName and Date", description = "Retrieve a Purchase Order Details using their UserName and GroupName and Date")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Purchase Order Detail found"),
+        @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+        @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", 
+        content = @Content(
+        		schema = @Schema(implementation = ErrorResponseDto.class)
+        		)), 
+    })
+	@GetMapping(path = "/findPurchaseOrdByUserGroupAndDate")
+    ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupAndDate(@Parameter(description = "UserName",example = "sarfarazalam") @RequestParam(name = "userName") String userName,
+    		                                                                       @Parameter(description = "GroupName",example = "RoomBillz") @RequestParam(name = "groupName") String groupName,
+    		                                                                       @Parameter(description = "Date",example = "2025-08-06") @RequestParam(name = "date") LocalDate date);
+
+
  
 
 }
