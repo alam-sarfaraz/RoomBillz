@@ -55,7 +55,7 @@ public interface IGroupDetailController {
         		)), 
     })
 	@GetMapping(path = "/findGroupDetailById")
-    ResponseEntity<GroupDetail> findGroupDetailById(@Parameter(description = "ID") @RequestParam(name = "id") Integer id);
+    ResponseEntity<GroupDetail> findGroupDetailById(@Parameter(description = "ID",example = "1") @RequestParam(name = "id") Integer id);
 	
 	
 	@Operation(summary = "Find Group Detail by Group Name", description = "Retrieve a Group Detail using their Group Name")
@@ -68,7 +68,7 @@ public interface IGroupDetailController {
         		)), 
     })
 	@GetMapping(path = "/findByGroupName")
-    ResponseEntity<GroupDetail> findByGroupName(@Parameter(description = "Group Name") @RequestParam(name = "groupName") String groupName);
+    ResponseEntity<GroupDetail> findByGroupName(@Parameter(description = "Group Name",example = "RoomBillz") @RequestParam(name = "groupName") String groupName);
 	
     @Operation(summary = "Delete Group Detail by ID", description = "Delete a  Group Detail using their ID")
     @ApiResponses(value = {
@@ -80,7 +80,7 @@ public interface IGroupDetailController {
         		)), 
     })
     @DeleteMapping("/deleteGroupById/{id}")
-    ResponseEntity<ResponseDto> deleteGroupById(@Parameter(description = "ID") @PathVariable(name = "id") Integer id);
+    ResponseEntity<ResponseDto> deleteGroupById(@Parameter(description = "ID",example = "1") @PathVariable(name = "id") Integer id);
     
     @Operation(summary = "Delete Group Detail by groupname", description = "Delete a Group Detail using their groupname")
     @ApiResponses(value = {
@@ -92,7 +92,7 @@ public interface IGroupDetailController {
         		)), 
     })
     @DeleteMapping("/deleteByGroupName")
-    ResponseEntity<ResponseDto> deleteByGroupName(@Parameter(description = "Groupname") @RequestParam(name = "groupName") String groupName);
+    ResponseEntity<ResponseDto> deleteByGroupName(@Parameter(description = "Groupname",example = "RoomBillz") @RequestParam(name = "groupName") String groupName);
     
     @Operation(summary = "Find All Group Detail", description = "Retrieve all Group Detail")
     @ApiResponses(value = {

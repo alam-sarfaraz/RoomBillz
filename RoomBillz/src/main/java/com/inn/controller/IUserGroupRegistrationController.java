@@ -53,8 +53,8 @@ public interface IUserGroupRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findUserGroupDetailByUserAndGroupName")
-    ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(@Parameter(description = "Username") @RequestParam(name = "userName") String userName,
-    		                                                                     @Parameter(description = "GroupName") @RequestParam(name = "groupName") String groupName); 
+    ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(@Parameter(description = "Username",example = "sarfarazalam") @RequestParam(name = "userName") String userName,
+    		                                                                     @Parameter(description = "GroupName",example = "RoomBillz") @RequestParam(name = "groupName") String groupName); 
 	
 	
 	@Operation(summary = "Find UserGroupDetailMapping by userName", description = "Retrieve UserGroupDetailMapping using their userName")
@@ -67,7 +67,7 @@ public interface IUserGroupRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findUserGroupDetailByUsername")
-    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByUsername(@Parameter(description = "Username") @RequestParam(name = "userName") String userName);
+    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByUsername(@Parameter(description = "Username",example = "sarfarazalam") @RequestParam(name = "userName") String userName);
 	
 	
 	@Operation(summary = "Find UserGroupDetailMapping by groupName", description = "Retrieve UserGroupDetailMapping using their groupName")
@@ -80,7 +80,7 @@ public interface IUserGroupRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findUserGroupDetailByGroupName")
-    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByGroupName(@Parameter(description = "GroupName") @RequestParam(name = "groupName") String groupName);
+    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByGroupName(@Parameter(description = "GroupName",example = "RoomBillz") @RequestParam(name = "groupName") String groupName);
 	
 	
 	@Operation(summary = "Find UserGroupDetailMapping by Email", description = "Retrieve UserGroupDetailMapping using their Email")
@@ -93,7 +93,7 @@ public interface IUserGroupRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findUserGroupDetailByEmail")
-    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(@Parameter(description = "Email") @RequestParam(name = "email") String email);
+    ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(@Parameter(description = "Email",example = "sarfarazalam@example.com") @RequestParam(name = "email") String email);
 	
 	
 

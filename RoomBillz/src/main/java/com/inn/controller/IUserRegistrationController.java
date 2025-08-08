@@ -55,7 +55,7 @@ public interface IUserRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findById")
-    ResponseEntity<UserRegistration> findById(@Parameter(description = "ID") @RequestParam(name = "id") Integer id);
+    ResponseEntity<UserRegistration> findById(@Parameter(description = "ID",example = "1") @RequestParam(name = "id") Integer id);
 
     @Operation(summary = "Find user by username", description = "Retrieve user details using their username")
     @ApiResponses(value = {
@@ -67,7 +67,7 @@ public interface IUserRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findByUserName")
-    ResponseEntity<UserRegistration> findByUserName(@Parameter(description = "Username") @RequestParam(name = "userName") String userName);
+    ResponseEntity<UserRegistration> findByUserName(@Parameter(description = "Username",example = "sarfarazalam") @RequestParam(name = "userName") String userName);
 
     @Operation(summary = "Delete user by ID", description = "Delete a user using their ID")
     @ApiResponses(value = {
@@ -79,7 +79,7 @@ public interface IUserRegistrationController {
         		)), 
     })
     @DeleteMapping("/deleteUserById/{id}")
-    ResponseEntity<ResponseDto> deleteUserById(@Parameter(description = "User ID") @PathVariable(name = "id") Integer id);
+    ResponseEntity<ResponseDto> deleteUserById(@Parameter(description = "User ID",example = "mohaalam35500") @PathVariable(name = "id") Integer id);
 
     
     @Operation(summary = "Delete user by username", description = "Delete a user using their username")
@@ -92,7 +92,7 @@ public interface IUserRegistrationController {
         		)), 
     })
     @DeleteMapping("/deleteByUserName")
-    ResponseEntity<ResponseDto> deleteByUserName(@Parameter(description = "Username") @RequestParam(name = "userName") String userName);
+    ResponseEntity<ResponseDto> deleteByUserName(@Parameter(description = "Username",example = "sarfarazalam") @RequestParam(name = "userName") String userName);
 
     @Operation(summary = "Update user by username", description = "Update user details using their username")
     @ApiResponses(value = {
@@ -120,7 +120,7 @@ public interface IUserRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findUserDetailByUserId")
-    ResponseEntity<UserRegistration> findUserDetailByUserId(@Parameter(description = "UserId") @RequestParam(name = "UserId") String UserId);
+    ResponseEntity<UserRegistration> findUserDetailByUserId(@Parameter(description = "UserId",example = "mohaalam35500") @RequestParam(name = "UserId") String UserId);
     
     @Operation(summary = "Find All User", description = "Retrieve all User's Detail")
     @ApiResponses(value = {
@@ -144,7 +144,7 @@ public interface IUserRegistrationController {
         		)), 
     })
     @GetMapping(path = "/findUserDetailByEmail")
-    ResponseEntity<UserRegistration> findUserDetailByEmail(@Parameter(description = "Email") @RequestParam(name = "Email") String email);
+    ResponseEntity<UserRegistration> findUserDetailByEmail(@Parameter(description = "Email",example = "sarfarazalam@example.com") @RequestParam(name = "Email") String email);
     
 
 }

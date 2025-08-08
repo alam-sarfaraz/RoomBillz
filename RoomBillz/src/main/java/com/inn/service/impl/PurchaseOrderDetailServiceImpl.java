@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.inn.customException.PurchaseOrderNotFoundException;
 import com.inn.customException.RoomBillzException;
 import com.inn.dto.LineItemDetailDto;
 import com.inn.dto.PurchaseOrderDetailDto;
@@ -194,6 +195,101 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 	        throw e;
 	    }
+	}
+
+	@Override
+	public ResponseEntity<List<PurchaseOrderDetail>> findAllPurchaseOrderDetail() {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findAllPurchaseOrderDetail ");
+			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findAll();
+			
+			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
+				throw new RoomBillzException("Purchase Order Detail not Found.");
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrderDetailById(Integer id) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailById {}", kv("Id", id));
+			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findById(id)
+					                                  .orElseThrow(() -> new PurchaseOrderNotFoundException("Purchase Order Detail", "Id", id.toString()));
+			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByUserName(String userName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByUserName {}",
+					kv("UserName", userName));
+			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByUserName(userName);
+			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "Username", userName);
+			}
+
+			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByGroupName(String groupName) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByGroupName {}",
+					kv("GroupName", groupName));
+			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository
+					.findByGroupName(groupName);
+			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "GroupName", groupName);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrderDetailByPurchaseId(String purchaseId) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByPurchaseId {}",
+					kv("PurchaseId", purchaseId));
+			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
+			if (purchaseOrderDetail == null) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByMonth(String month) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByMonth {}", kv("Month", month));
+			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByMonth(month);
+			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "Month", month);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
 	}
 
 

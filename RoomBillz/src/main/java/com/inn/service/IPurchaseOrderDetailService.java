@@ -7,11 +7,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.inn.dto.PurchaseOrderDetailDto;
 import com.inn.dto.ResponseDto;
+import com.inn.entity.PurchaseOrderDetail;
 
 import jakarta.validation.Valid;
 
 public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<ResponseDto> createPurchaseOrder(@Valid PurchaseOrderDetailDto purchaseOrderDetailDto,List<MultipartFile> invoiceFiles);
+
+	public ResponseEntity<List<PurchaseOrderDetail>> findAllPurchaseOrderDetail();
+
+	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrderDetailById(Integer id);
+
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByUserName(String userName);
+
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByGroupName(String groupName);
+
+	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrderDetailByPurchaseId(String purchaseId);
+
+	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByMonth(String month);
 
 }
