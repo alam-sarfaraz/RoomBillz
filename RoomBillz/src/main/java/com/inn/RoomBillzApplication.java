@@ -33,7 +33,7 @@ public class RoomBillzApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RoomBillzApplication.class, args);
-		System.out.println("************************************************** Service Started Successfully ************************************************************");
+		System.out.println("************************************************** RoomBillz Service Started Successfully ************************************************************");
 	}
 
 }

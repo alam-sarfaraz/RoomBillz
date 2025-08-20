@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ROOMBILLZ
+    name: ROOM_BILLZ
   datasource:
     url: jdbc:mysql://localhost:3306/roombillz
     username: root
