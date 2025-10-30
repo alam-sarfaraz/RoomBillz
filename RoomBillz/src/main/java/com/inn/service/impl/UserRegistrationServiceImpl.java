@@ -54,7 +54,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ResponseDto("201", "UserRegistration Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -85,7 +85,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 		UserRegistration userRegistration = iUserRegistrationRepository.findById(id).orElseThrow(()->new UserNotFoundException("User", "Id", id.toString()));
 		return userRegistration;
 		}catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -97,7 +97,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 			return iUserRegistrationRepository.findByUserName(userName)
 					                          .orElseThrow(()->new UserNotFoundException("User", "UserName", userName));
 			}catch (Exception e) {
-				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 				throw e;
 			}
 		}
@@ -114,7 +114,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseDto("200", "User Deleted Successfully..."));
 			} catch (Exception e) {
-				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 				throw e;
 			}
 		}
@@ -128,7 +128,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseDto("200", "User Deleted Successfully..."));
 			} catch (Exception e) {
-				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 				throw e;
 			}
 		}
@@ -144,7 +144,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 				return ResponseEntity.status(HttpStatus.CREATED)
 						.body(new ResponseDto("200", "User Detail Updated Successfully..."));
 				}catch (Exception e) {
-					logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+					logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 					throw e;
 				}
 			}
@@ -155,7 +155,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 			UserRegistration userRegistration = iUserRegistrationRepository.findByUserId(userId.toLowerCase()).orElseThrow(()->new UserNotFoundException("UserId", "userId", userId.toLowerCase()));
 			return userRegistration;
 			}catch (Exception e) {
-				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 				throw e;
 			}
 		}
@@ -170,7 +170,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 				}
 				return ResponseEntity.status(HttpStatus.OK).body(userRegistration);
 			} catch (Exception e) {
-				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 				throw e;
 			}
 		}
@@ -183,7 +183,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 						.orElseThrow(() -> new UserNotFoundException("Email", "Email", email));
 				return ResponseEntity.status(HttpStatus.OK).body(userRegistration);
 			} catch (Exception e) {
-				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 				throw e;
 			}
 		}

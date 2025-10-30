@@ -44,7 +44,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ResponseDto("201", "UserRegistration Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -68,7 +68,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			 return ResponseEntity.status(HttpStatus.OK)
 						.body(groupDetail);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -82,7 +82,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			 return ResponseEntity.status(HttpStatus.OK)
 						.body(groupDetail);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -98,7 +98,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseDto("200", "Group Deleted Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -113,7 +113,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			return ResponseEntity.status(HttpStatus.OK)
 					             .body(new ResponseDto("200", "Group Deleted Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -128,7 +128,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(groupDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}

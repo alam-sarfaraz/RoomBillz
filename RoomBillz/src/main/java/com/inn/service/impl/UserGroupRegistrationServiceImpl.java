@@ -85,7 +85,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ResponseDto("201", "User Register in group Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -101,7 +101,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 					.orElseThrow(() -> new UserAndGroupException(userName, groupName));
 			return ResponseEntity.status(HttpStatus.OK).body(detailMapping);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -117,7 +117,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -134,7 +134,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -149,7 +149,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}

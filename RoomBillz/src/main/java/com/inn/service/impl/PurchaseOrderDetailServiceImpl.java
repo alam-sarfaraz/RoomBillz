@@ -143,7 +143,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
 	       return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("201","Purchase Order saved Successfully."));
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -213,7 +213,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        logger.error("File saving failed: {}", e.getMessage(), e);
 	        throw new RoomBillzException("Error saving file: " + e.getMessage());
 	    } catch (Exception e) {
-	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 	        throw e;
 	    }
 	}
@@ -230,7 +230,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -243,7 +243,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 					                                  .orElseThrow(() -> new PurchaseOrderNotFoundException("Purchase Order Detail", "Id", id.toString()));
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -260,7 +260,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -277,7 +277,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -293,7 +293,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -308,7 +308,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -323,7 +323,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -338,7 +338,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -353,7 +353,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -368,7 +368,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -383,7 +383,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -404,7 +404,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        }
 	        return downloadFile(purchaseId, invoiceDetails);
 	    } catch (Exception e) {
-	        logger.error("{} {}", RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+	        logger.error("{} {}", RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 	        throw e;
 	    }
 	}
@@ -481,7 +481,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        logger.warn("Purchase order not found for purchaseId: {}", purchaseId);
 	        throw ex; 
 	    } catch (Exception e) {
-	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()), e);
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
 	        throw e;
 	    }
 	}
@@ -499,7 +499,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			
 			return null;
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -537,7 +537,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	      logger.info("Full file path and file name {}", kv("Full path ", downloadPath + downloadedFileName));
 	      return RoomUtility.downloadFile(downloadPath + downloadedFileName);
 	    } catch (Exception e) {
-	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Exception", e.getMessage()));
+	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 	      throw e;
 	    }
 	  }
@@ -566,7 +566,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	      RoomUtility.cellRender(cellValueList, row);
 	      return ++rowIndex;
 	    } catch (Exception e) {
-	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Exception", e.getMessage()));
+	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 	      throw e;
 	    }
 	  }
