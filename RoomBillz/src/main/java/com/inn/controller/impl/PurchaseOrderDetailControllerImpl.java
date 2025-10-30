@@ -157,6 +157,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 
 
 	@Override
+	@LogRequestResponse
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserNameAndDate(String userName, LocalDate date) {
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserNameAndDate {}",kv("UserName", userName),kv("Date", date));
@@ -169,10 +170,24 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 
 
 	@Override
+	@LogRequestResponse
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupAndDate(String userName,String groupName, LocalDate date) {
 		try {
 			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupAndDate {}",kv("UserName", userName),kv("GroupName", groupName),kv("Date", date));
 			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndGroupAndDate(userName,groupName,date);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(String purchaseId) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "downloadPurchaseOrderDetailByPurchaseId {}",kv("purchaseId", purchaseId));
+			return iPurchaseOrderDetailService.downloadPurchaseOrderDetailByPurchaseId(purchaseId);
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;

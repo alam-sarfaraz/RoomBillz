@@ -18,6 +18,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "PURCHASE_ORDER_DETAIL")
@@ -80,10 +81,12 @@ public class PurchaseOrderDetail extends BaseEntity {
 
 	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
+	@ToString.Exclude
 	private List<LineItemDetail> lineItemDetails;
 
 	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
+	@ToString.Exclude
 	private List<InvoiceDetail> invoiceDetails;
 
 }

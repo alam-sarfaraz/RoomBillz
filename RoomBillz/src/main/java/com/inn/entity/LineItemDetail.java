@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "LINE_ITEM_DETAIL")
@@ -42,6 +43,7 @@ public class LineItemDetail{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PURCHASE_ORDER_ID", nullable = false)
 	@JsonBackReference
+	@ToString.Exclude
 	private PurchaseOrderDetail purchaseOrder;
 
 }

@@ -38,6 +38,8 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupAndDate(String userName,String groupName, LocalDate date);
 
+	public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(String purchaseId);
+
 	
 
 }

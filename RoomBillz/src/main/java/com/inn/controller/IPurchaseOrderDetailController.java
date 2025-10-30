@@ -46,7 +46,7 @@ public interface IPurchaseOrderDetailController {
 	                                                       content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
 	                                                       schema =  @Schema(implementation = PurchaseOrderDetailDto.class)))
 	                                                       @Valid @RequestPart("purchaseOrder") PurchaseOrderDetailDto purchaseOrderDetailDto,
-                                                           @Parameter(description = "List of invoice files", required = true)
+                                                           @Parameter(description = "List of invoice files", required = false)
 	                                                       @RequestPart("files") List<MultipartFile> invoiceFiles);
 	
 	@Operation(summary = "Find all Purchase Order Details", description = "Retrieve all Purchase Order Details")
@@ -192,6 +192,18 @@ public interface IPurchaseOrderDetailController {
     		                                                                       @Parameter(description = "Date",example = "2025-08-06") @RequestParam(name = "date") LocalDate date);
 
 
- 
+	@Operation(summary = "Download PurchaseOrder Details Invoice Details by purchaseId",
+		       description = "Retrieve and download Purchase Order Details Invoice Details by purchaseId")
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200", description = "File downloaded successfully"),
+		    @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+		    @ApiResponse(responseCode = "500", description = "Internal Server Error",
+		        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+		    ),
+		})
+		@GetMapping(path = "/downloadPurchaseOrderDetailByPurchaseId", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+		public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(
+		        @Parameter(description = "PurchaseId", example = "PO-00002")
+		        @RequestParam(name = "purchaseId") String purchaseId);
 
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -115,11 +116,15 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 				lineItemDetail.setPurchaseOrder(purchaseOrderDetail);
 				lineItemDetailList.add(lineItemDetail);
 			});
-			
-			List<InvoiceDetail> invoiceFileDetailList = setInvoiceFileDetails(invoiceFiles,purchaseOrderDetail);
-			logger.info("Invoice File Detail List {}",kv("invoiceFileDetailList", invoiceFileDetailList));
+			Optional.ofNullable(invoiceFiles)
+	        .filter(files -> !files.get(0).isEmpty())
+	        .ifPresent(files -> {
+	            List<InvoiceDetail> invoiceFileDetailList = setInvoiceFileDetails(files, purchaseOrderDetail);
+	            logger.info("Invoice File Detail List {}", kv("invoiceFileDetailList", invoiceFileDetailList));
+	            purchaseOrderDetail.setInvoiceDetails(invoiceFileDetailList);
+	        });
+
 			purchaseOrderDetail.setLineItemDetails(lineItemDetailList);
-			purchaseOrderDetail.setInvoiceDetails(invoiceFileDetailList);
 			iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
 	       return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("201","Purchase Order saved Successfully."));
 		} catch (Exception e) {
@@ -362,6 +367,27 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 				throw new RoomBillzException("Purchase Order Detail not Found.");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
+		} catch (Exception e) {
+			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(String purchaseId) {
+		try {
+			logger.info(RoomContants.INSIDE_THE_METHOD + "downloadPurchaseOrderDetailByPurchaseId {}",kv("purchaseId", purchaseId));
+			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
+			logger.info("PurchaseOrderDetail {}",kv("PurchaseOrderDetail", purchaseId));
+			if (purchaseOrderDetail == null) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
+			}
+			List<InvoiceDetail> invoiceDetails = purchaseOrderDetail.getInvoiceDetails();
+			logger.info("InvoiceDetail {}",kv("InvoiceDetail", invoiceDetails));
+			if(invoiceDetails == null || invoiceDetails.isEmpty()) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail does not contains any invoice details", "PurchaseId", purchaseId);
+			}
+			return null;
 		} catch (Exception e) {
 			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
