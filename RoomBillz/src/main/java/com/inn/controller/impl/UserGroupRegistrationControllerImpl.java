@@ -33,7 +33,7 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
 			return iUserGroupRegistrationService.registerUserWithGroup(userGroupRegistrationDto);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -45,7 +45,7 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}", kv("userName",userName), kv("groupName",groupName));
 			return iUserGroupRegistrationService.findUserGroupDetailByUserAndGroupName(userName,groupName);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -57,7 +57,7 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByUsername {}", kv("UserName",userName));
 			return iUserGroupRegistrationService.findUserGroupDetailByUsername(userName);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -69,7 +69,7 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByGroupName {}",kv("GroupName",groupName));
 			return iUserGroupRegistrationService.findUserGroupDetailByGroupName(groupName);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -81,7 +81,7 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByEmail {}",kv("Email",email));
 			return iUserGroupRegistrationService.findUserGroupDetailByEmail(email);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}

@@ -10,6 +10,7 @@ public class RoomConstants {
 	public static final String APPROVED = "Approved";
 	public static final String REJECTED = "Rejected";
 	public static final String DATE_TIME = "yyyyMMddHHmm";
+	public static final String ERROR_MESSAGE = "Error Message :";
 	public static final String DOWNLOAD_EXCEL_SHEET_PO_DETAIL_PATH = "C:\\Final_Room_Management\\Final_project\\Room_Management\\PODetailReport\\";
 
 }

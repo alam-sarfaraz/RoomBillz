@@ -38,7 +38,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "createPurchaseOrder {}",kv("PurchaseOrderDetailDto", purchaseOrderDetailDto));
 			return iPurchaseOrderDetailService.createPurchaseOrder(purchaseOrderDetailDto, invoiceFiles);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -51,7 +51,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findAllPurchaseOrderDetail ");
 			return iPurchaseOrderDetailService.findAllPurchaseOrderDetail();
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -64,7 +64,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailById {}",kv("Id", id));
 			return iPurchaseOrderDetailService.findPurchaseOrderDetailById(id);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -76,7 +76,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByUserName {}",kv("userName", userName));
 			return iPurchaseOrderDetailService.findPurchaseOrderDetailByUserName(userName);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -88,7 +88,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByGroupName {}",kv("groupName", groupName));
 			return iPurchaseOrderDetailService.findPurchaseOrderDetailByGroupName(groupName);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -112,7 +112,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByMonth {}",kv("month", month));
 			return iPurchaseOrderDetailService.findPurchaseOrderDetailByMonth(month);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -124,7 +124,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByDate {}",kv("Date", date));
 			return iPurchaseOrderDetailService.findPurchaseOrderDetailByDate(date);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -137,7 +137,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupName {}",kv("UserName", userName),kv("GroupName", groupName));
 			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndGroupName(userName,groupName);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -150,7 +150,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndPurchaseId {}",kv("UserName", userName),kv("purchaseId", purchaseId));
 			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndPurchaseId(userName,purchaseId);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -163,7 +163,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserNameAndDate {}",kv("UserName", userName),kv("Date", date));
 			return iPurchaseOrderDetailService.findPurchaseOrdByUserNameAndDate(userName,date);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -176,7 +176,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupAndDate {}",kv("UserName", userName),kv("GroupName", groupName),kv("Date", date));
 			return iPurchaseOrderDetailService.findPurchaseOrdByUserAndGroupAndDate(userName,groupName,date);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -189,7 +189,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "downloadPurchaseOrderDetailByPurchaseId {}",kv("purchaseId", purchaseId));
 			return iPurchaseOrderDetailService.downloadPurchaseOrderDetailByPurchaseId(purchaseId);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -202,7 +202,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "deletePurchaseOrderDetailByPurchaseId {}",kv("purchaseId", purchaseId));
 			return iPurchaseOrderDetailService.deletePurchaseOrderDetailByPurchaseId(purchaseId);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
@@ -215,7 +215,7 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailByUsernameGroupAndMonthWise {}",kv("Username", username),kv("GroupName", groupName),kv("Month", month));
 			return iPurchaseOrderDetailService.exportPODetailByUsernameGroupAndMonthWise(username,groupName,month);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
 		}
 	}
