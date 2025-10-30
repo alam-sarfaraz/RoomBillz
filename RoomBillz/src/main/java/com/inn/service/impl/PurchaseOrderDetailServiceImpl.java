@@ -554,7 +554,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	      List<String> cellValueList = new ArrayList<>();
 	      cellValueList.add(poDetail.getId().toString());
 	      cellValueList.add(poDetail.getUserName());
-	      cellValueList.add(poDetail.getFirstName());
+	      cellValueList.add(RoomUtility.getFullName(poDetail.getFirstName(), poDetail.getMiddleName(), poDetail.getLastName()));
 	      cellValueList.add(poDetail.getEmail());
 	      cellValueList.add(poDetail.getMobileNumber());
 	      cellValueList.add(poDetail.getPurchaseId());

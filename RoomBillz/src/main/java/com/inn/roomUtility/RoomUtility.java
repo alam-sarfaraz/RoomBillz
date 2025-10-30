@@ -102,4 +102,23 @@ public class RoomUtility {
 	    }
 	  }
 
+	public static String getFullName(String firstName, String middleName, String lastName) {
+        StringBuilder fullName = new StringBuilder();
+
+        if (firstName != null && !firstName.trim().isEmpty()) {
+            fullName.append(firstName.trim());
+        }
+
+        if (middleName != null && !middleName.trim().isEmpty()) {
+            if (fullName.length() > 0) fullName.append(" ");
+            fullName.append(middleName.trim());
+        }
+
+        if (lastName != null && !lastName.trim().isEmpty()) {
+            if (fullName.length() > 0) fullName.append(" ");
+            fullName.append(lastName.trim());
+        }
+
+        return fullName.toString();
+    }
 }
