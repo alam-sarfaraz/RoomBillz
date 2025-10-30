@@ -2,6 +2,9 @@ package com.inn.service.impl;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,12 +18,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -375,24 +383,81 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 
 	@Override
 	public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(String purchaseId) {
-		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "downloadPurchaseOrderDetailByPurchaseId {}",kv("purchaseId", purchaseId));
-			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
-			logger.info("PurchaseOrderDetail {}",kv("PurchaseOrderDetail", purchaseId));
-			if (purchaseOrderDetail == null) {
-				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
-			}
-			List<InvoiceDetail> invoiceDetails = purchaseOrderDetail.getInvoiceDetails();
-			logger.info("InvoiceDetail {}",kv("InvoiceDetail", invoiceDetails));
-			if(invoiceDetails == null || invoiceDetails.isEmpty()) {
-				throw new PurchaseOrderNotFoundException("Purchase Order Detail does not contains any invoice details", "PurchaseId", purchaseId);
-			}
-			return null;
-		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
-			throw e;
-		}
+	    try {
+	        logger.info("{} downloadPurchaseOrderDetailByPurchaseId {}", RoomContants.INSIDE_THE_METHOD, kv("purchaseId", purchaseId));
+	        PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
+	        if (purchaseOrderDetail == null) {
+	            throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
+	        }
+	        logger.info("PurchaseOrderDetail fetched successfully for {}", kv("purchaseId", purchaseOrderDetail.getPurchaseId()));
+	        List<InvoiceDetail> invoiceDetails = purchaseOrderDetail.getInvoiceDetails();
+	        logger.info("InvoiceDetail List Size = {}",(invoiceDetails != null ? invoiceDetails.size() : "null"));
+	        if (invoiceDetails == null || invoiceDetails.isEmpty()) {
+	            throw new PurchaseOrderNotFoundException("Purchase Order Detail does not contain any invoice details","PurchaseId",purchaseId);
+	        }
+	        return downloadFile(purchaseId, invoiceDetails);
+	    } catch (Exception e) {
+	        logger.error("{} {}", RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+	        throw e;
+	    }
 	}
+
+
+	private ResponseEntity<byte[]> downloadFile(String purchaseId, List<InvoiceDetail> invoiceDetails) {
+	    logger.info("{} downloadFile {}", RoomContants.INSIDE_THE_METHOD, kv("InvoiceDetails", invoiceDetails));
+	    HttpHeaders headers = new HttpHeaders();
+	    try {
+	        // ✅ Single file
+	        if (invoiceDetails.size() == 1) {
+	            InvoiceDetail invoice = invoiceDetails.get(0);
+	            File file = new File(invoice.getFilePath());
+
+	            if (!file.exists()) {
+	                logger.error("File not found: {}", file.getAbsolutePath());
+	                throw new PurchaseOrderNotFoundException("Invoice file does not exist","File Name",invoice.getFileName());
+	            }
+	            byte[] fileBytes = Files.readAllBytes(file.toPath());
+	            // Detect MIME type automatically
+	            MediaType mediaType = MediaTypeFactory.getMediaType(file.getName())
+	                                  .orElse(MediaType.APPLICATION_OCTET_STREAM);
+
+	            headers.setContentType(mediaType);
+	            headers.setContentDispositionFormData("attachment", file.getName());
+	            logger.info("Returning single file: {} ({} bytes)", file.getName(), fileBytes.length);
+	            return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
+	        }
+
+	        // ✅ Multiple files → Create ZIP in memory
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        try (ZipOutputStream zipOut = new ZipOutputStream(baos)) {
+	            for (InvoiceDetail invoice : invoiceDetails) {
+	                File file = new File(invoice.getFilePath());
+	                if (!file.exists()) {
+	                    logger.warn("Skipping missing file: {}", file.getAbsolutePath());
+	                    continue;
+	                }
+
+	                try (FileInputStream fis = new FileInputStream(file)) {
+	                    ZipEntry zipEntry = new ZipEntry(file.getName());
+	                    zipOut.putNextEntry(zipEntry);
+	                    fis.transferTo(zipOut);
+	                    zipOut.closeEntry();
+	                }
+	            }
+	        }
+	        byte[] zipBytes = baos.toByteArray();
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        headers.setContentDispositionFormData("attachment", purchaseId + "_invoices.zip");
+	        logger.info("Returning ZIP file for purchaseId={} ({} bytes)", purchaseId, zipBytes.length);
+	        return new ResponseEntity<>(zipBytes, headers, HttpStatus.OK);
+
+	    } catch (IOException e) {
+	        logger.error("Error while preparing file download: {}", e.getMessage(), e);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
+
 
 	
 

@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: ROOM_BILLZ
+  devtools:
+    restart:
+      enabled: true       # Ensures automatic restart on classpath changes
+    livereload:
+      enabled: true     
   datasource:
     url: jdbc:mysql://localhost:3306/roombillz
     username: root
