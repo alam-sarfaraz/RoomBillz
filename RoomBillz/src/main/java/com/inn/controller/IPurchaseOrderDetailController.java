@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -205,5 +206,37 @@ public interface IPurchaseOrderDetailController {
 		public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(
 		        @Parameter(description = "PurchaseId", example = "PO-00002")
 		        @RequestParam(name = "purchaseId") String purchaseId);
+		
+		
+		@Operation(summary = "Delete PurchaseOrder Details by purchaseId",description = "Delete PurchaseOrder Details by purchaseId")
+			@ApiResponses(value = {
+			    @ApiResponse(responseCode = "200", description = "Delete PurchaseOrder Details successfully"),
+			    @ApiResponse(responseCode = "404", description = "Purchase Order Detail not found"),
+			    @ApiResponse(responseCode = "500", description = "Internal Server Error",
+			        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+			    ),
+			})
+			@DeleteMapping(path = "/deletePurchaseOrderDetailByPurchaseId", produces = MediaType.APPLICATION_JSON_VALUE)
+			public ResponseEntity<ResponseDto> deletePurchaseOrderDetailByPurchaseId(@Parameter(description = "PurchaseId", example = "PO-00000")
+			                                                                         @RequestParam(name = "purchaseId") String purchaseId);
+		
+		
+		@Operation(summary = "Export Purchase Order Details by Username, Group Name, and Month",description = "Exports Purchase Order Details based on the provided Username, Group Name, and Month.")
+			@ApiResponses(value = {
+			    @ApiResponse(responseCode = "200", description = "Purchase Order Details exported successfully",
+			        content = @Content(mediaType = "application/octet-stream")),
+			    @ApiResponse(responseCode = "404", description = "Purchase Order Details not found",
+			        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			    @ApiResponse(responseCode = "500", description = "Internal Server Error",
+			        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+			})
+			@GetMapping(path = "/exportPODetailByUsernameGroupAndMonthWise", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+			ResponseEntity<byte[]> exportPODetailByUsernameGroupAndMonthWise(@Parameter(description = "Username of the requester or owner of the Purchase Orders", example = "sarfarazalam")
+			                                                                 @RequestParam(name = "username", required = true) String username,
+                                                                             @Parameter(description = "Group name associated with the Purchase Orders", example = "RoomBillz")
+			                                                                 @RequestParam(name = "groupName", required = true) String groupName,
+                                                                             @Parameter(description = "Month for which Purchase Order Details are to be exported (format: MMM-yyyy or MM-yyyy)", example = "August")
+			                                                                 @RequestParam(name = "month", required = true) String month);
+
 
 }

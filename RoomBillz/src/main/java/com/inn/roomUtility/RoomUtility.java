@@ -1,12 +1,26 @@
 package com.inn.roomUtility;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.inn.customException.RoomBillzException;
+import com.inn.roomConstants.RoomConstants;
+import com.inn.service.impl.PurchaseOrderDetailServiceImpl;
 
 public class RoomUtility {
+	
+	private static final Logger logger = LoggerFactory.getLogger(RoomUtility.class);
 
 	public static String generateCode() {
 		Random random = new Random();
@@ -59,6 +73,33 @@ public class RoomUtility {
 	        throw new RoomBillzException("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character");
 	    }
 	}
+	
+	public static void cellRender(List<String> cellValueList, Row row) {
+	    try {
+	      Integer columnIndex = 0;
+	      for (String cellResult : cellValueList) {
+	        Cell cell = row.createCell(columnIndex++);
+	        cell.setCellValue(cellResult);
+	      }
+	    } catch (Exception ex) {
+	      logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, "paymentCellRender {}", ex.getMessage());
+	    }
+	  }
 
+	public static ResponseEntity<byte[]> downloadFile(String filePath) {
+		logger.info("Inside the downloadFile  :{}", filePath);
+	    try {
+	      File file = new File(filePath);
+	      String fileName = file.getName();
+	      logger.info("downloadFile fileName : {}", fileName);
+	      byte[] fileByteArray = org.apache.commons.io.IOUtils.toByteArray(new FileInputStream(file));
+	      HttpHeaders headers = new HttpHeaders();
+	      headers.add("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+	      return new ResponseEntity<>(fileByteArray, headers, HttpStatus.OK);
+	    } catch (Exception e) {
+	    	logger.error("Error inside downloadFile : {}", e.getMessage());
+	      return null;
+	    }
+	  }
 
 }

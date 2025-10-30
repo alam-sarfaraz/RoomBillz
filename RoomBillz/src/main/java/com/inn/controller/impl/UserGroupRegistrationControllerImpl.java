@@ -15,7 +15,7 @@ import com.inn.dto.ResponseDto;
 import com.inn.dto.UserGroupRegistrationDto;
 import com.inn.entity.UserGroupDetailMapping;
 import com.inn.logs.LogRequestResponse;
-import com.inn.roomConstants.RoomContants;
+import com.inn.roomConstants.RoomConstants;
 import com.inn.service.IUserGroupRegistrationService;
 
 @RestController
@@ -30,10 +30,10 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 	@LogRequestResponse
 	public ResponseEntity<ResponseDto> registerUserWithGroup(UserGroupRegistrationDto userGroupRegistrationDto) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
 			return iUserGroupRegistrationService.registerUserWithGroup(userGroupRegistrationDto);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -42,10 +42,10 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 	@LogRequestResponse
 	public ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(String userName,String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}", kv("userName",userName), kv("groupName",groupName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}", kv("userName",userName), kv("groupName",groupName));
 			return iUserGroupRegistrationService.findUserGroupDetailByUserAndGroupName(userName,groupName);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -54,10 +54,10 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 	@LogRequestResponse
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByUsername(String userName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUsername {}", kv("UserName",userName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByUsername {}", kv("UserName",userName));
 			return iUserGroupRegistrationService.findUserGroupDetailByUsername(userName);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -66,10 +66,10 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 	@LogRequestResponse
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByGroupName(String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByGroupName {}",kv("GroupName",groupName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByGroupName {}",kv("GroupName",groupName));
 			return iUserGroupRegistrationService.findUserGroupDetailByGroupName(groupName);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -78,10 +78,10 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 	@LogRequestResponse
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(String email) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByEmail {}",kv("Email",email));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByEmail {}",kv("Email",email));
 			return iUserGroupRegistrationService.findUserGroupDetailByEmail(email);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}

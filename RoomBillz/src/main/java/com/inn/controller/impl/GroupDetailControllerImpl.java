@@ -16,7 +16,7 @@ import com.inn.dto.GroupDetailDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.GroupDetail;
 import com.inn.logs.LogRequestResponse;
-import com.inn.roomConstants.RoomContants;
+import com.inn.roomConstants.RoomConstants;
 import com.inn.service.IGroupDetailService;
 
 @RestController
@@ -31,10 +31,10 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 	@LogRequestResponse
 	public ResponseEntity<ResponseDto> createGroupDetail(GroupDetailDto groupDetailDto) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "createGroupDetail {}", kv("GroupDetailDto",groupDetailDto));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "createGroupDetail {}", kv("GroupDetailDto",groupDetailDto));
 			return iGroupDetailService.createGroupDetail(groupDetailDto);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -44,10 +44,10 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 	@LogRequestResponse
 	public ResponseEntity<GroupDetail> findGroupDetailById(@PathVariable Integer id) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findGroupDetailById {}", kv("Id", id));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findGroupDetailById {}", kv("Id", id));
 			return iGroupDetailService.findGroupDetailById(id);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 
@@ -57,10 +57,10 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 	@LogRequestResponse
 	public ResponseEntity<GroupDetail> findByGroupName(@PathVariable String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findByGroupName {}", kv("groupName", groupName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findByGroupName {}", kv("groupName", groupName));
 			return iGroupDetailService.findByGroupName(groupName);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -69,10 +69,10 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 	@LogRequestResponse
 	public ResponseEntity<ResponseDto> deleteGroupById(Integer id) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "deleteGroupById {}", kv("Id:", id));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteGroupById {}", kv("Id:", id));
 			return iGroupDetailService.deleteGroupById(id);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -81,10 +81,10 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 	@LogRequestResponse
 	public ResponseEntity<ResponseDto> deleteByGroupName(String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "deleteByUserName {}", kv("UserName", groupName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteByUserName {}", kv("UserName", groupName));
 			return iGroupDetailService.deleteByGroupName(groupName);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -94,10 +94,10 @@ public class GroupDetailControllerImpl implements IGroupDetailController{
 	@LogRequestResponse
 	public ResponseEntity<List<GroupDetail>> findAllGroupDetail() {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findAllGroupDetail ");
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findAllGroupDetail ");
 			return iGroupDetailService.findAllGroupDetail();
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}

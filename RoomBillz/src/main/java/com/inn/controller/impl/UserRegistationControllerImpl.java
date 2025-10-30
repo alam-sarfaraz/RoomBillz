@@ -16,7 +16,7 @@ import com.inn.dto.ResponseDto;
 import com.inn.dto.UserRegistrationDto;
 import com.inn.entity.UserRegistration;
 import com.inn.logs.LogRequestResponse;
-import com.inn.roomConstants.RoomContants;
+import com.inn.roomConstants.RoomConstants;
 import com.inn.service.IUserRegistrationService;
 
 @RestController
@@ -31,10 +31,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	@LogRequestResponse
 	public ResponseEntity<ResponseDto> userRegistration(UserRegistrationDto userRegistrationDto) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "userRegistration {}", kv("UserRegistrationDto",userRegistrationDto));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "userRegistration {}", kv("UserRegistrationDto",userRegistrationDto));
 			return iUserRegistrationService.userRegistration(userRegistrationDto);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -43,12 +43,12 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	  @LogRequestResponse
 	  public ResponseEntity<UserRegistration> findById(Integer id) {
 		  try {
-		  logger.info(RoomContants.INSIDE_THE_METHOD + "findById {}",kv("Id",id));
+		  logger.info(RoomConstants.INSIDE_THE_METHOD + "findById {}",kv("Id",id));
 		  UserRegistration userRegistation = iUserRegistrationService.findById(id);
 	         return ResponseEntity.status(HttpStatus.OK)
 	 				.body(userRegistation);
 	  }catch (Exception e) {
-		  logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+		  logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	  }
@@ -57,11 +57,11 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 	  @LogRequestResponse
 	  public ResponseEntity<UserRegistration> findByUserName(String userName) {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserName {}",kv("UserName", userName));
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "findByUserName {}",kv("UserName", userName));
 				UserRegistration userRegistation = iUserRegistrationService.findByUserName(userName);
 				return ResponseEntity.status(HttpStatus.OK).body(userRegistation);
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}
@@ -70,10 +70,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		@LogRequestResponse
 		public ResponseEntity<ResponseDto> deleteUserById(Integer id) {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "deleteUserById {}",kv("Id:", id));
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteUserById {}",kv("Id:", id));
 				return iUserRegistrationService.deleteUserById(id); 
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}
@@ -83,10 +83,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		@LogRequestResponse
 		public ResponseEntity<ResponseDto> deleteByUserName(String userName) {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "deleteByUserName {}",kv("UserName", userName));
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteByUserName {}",kv("UserName", userName));
 				return iUserRegistrationService.deleteByUserName(userName);
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}
@@ -95,10 +95,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		@LogRequestResponse
 		public ResponseEntity<ResponseDto> updateUserByUserName(String userName,UserRegistrationDto userRegistrationDto) {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "updateUserByUserName {}", kv("UserName",userName),kv("UserRegistrationDto",userRegistrationDto));
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "updateUserByUserName {}", kv("UserName",userName),kv("UserRegistrationDto",userRegistrationDto));
 				return iUserRegistrationService.updateUserByUserName(userName,userRegistrationDto);
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}
@@ -107,11 +107,11 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		@LogRequestResponse
 		public ResponseEntity<UserRegistration> findUserDetailByUserId(String userId) {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "findUserDetailByUserId {}", kv("userId", userId));
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserDetailByUserId {}", kv("userId", userId));
 				UserRegistration userRegistation = iUserRegistrationService.findUserDetailByUserId(userId);
 				return ResponseEntity.status(HttpStatus.OK).body(userRegistation);
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}
@@ -120,10 +120,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		@LogRequestResponse
 		public ResponseEntity<List<UserRegistration>> findAllUserDetil() {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "findAllUserDetil ");
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "findAllUserDetil ");
 				return iUserRegistrationService.findAllUserDetil();
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}
@@ -132,10 +132,10 @@ public class UserRegistationControllerImpl implements IUserRegistrationControlle
 		@LogRequestResponse
 		public ResponseEntity<UserRegistration> findUserDetailByEmail(String email) {
 			try {
-				logger.info(RoomContants.INSIDE_THE_METHOD + "findUserDetailByEmail {}",kv("Email",email));
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserDetailByEmail {}",kv("Email",email));
 				return iUserRegistrationService.findUserDetailByEmail(email);
 			} catch (Exception e) {
-				logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 				throw e;
 			}
 		}

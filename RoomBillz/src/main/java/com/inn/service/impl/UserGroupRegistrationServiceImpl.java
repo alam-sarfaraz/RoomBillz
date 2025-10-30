@@ -24,7 +24,7 @@ import com.inn.entity.UserGroupDetailMapping;
 import com.inn.entity.UserRegistration;
 import com.inn.repository.IGroupDetailMappingRepository;
 import com.inn.repository.IUserGroupDetailMappingRepository;
-import com.inn.roomConstants.RoomContants;
+import com.inn.roomConstants.RoomConstants;
 import com.inn.service.IGroupDetailService;
 import com.inn.service.IUserGroupRegistrationService;
 import com.inn.service.IUserRegistrationService;
@@ -48,7 +48,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 	
 	public ResponseEntity<ResponseDto> registerUserWithGroup(UserGroupRegistrationDto userGroupRegistrationDto) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "registerUserWithGroup {}", kv("UserGroupRegistrationDto",userGroupRegistrationDto));
 			
 			Optional<UserGroupDetailMapping> userGroupDetailMapping = iUserGroupDetailMappingRepository.findByUserNameAndGroupDetailMapping_GroupName(userGroupRegistrationDto.getUserName(),userGroupRegistrationDto.getGroupName());
 			logger.info("UserGroupDetailMapping Data {}", kv("UserGroupDetailMapping",userGroupDetailMapping));
@@ -85,7 +85,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ResponseDto("201", "User Register in group Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -94,14 +94,14 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 	public ResponseEntity<UserGroupDetailMapping> findUserGroupDetailByUserAndGroupName(String userName,
 			String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}",
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByUserAndGroupName {}",
 					kv("userName", userName), kv("groupName", groupName));
 			UserGroupDetailMapping detailMapping = iUserGroupDetailMappingRepository
 					.findByUserNameAndGroupDetailMapping_GroupName(userName, groupName)
 					.orElseThrow(() -> new UserAndGroupException(userName, groupName));
 			return ResponseEntity.status(HttpStatus.OK).body(detailMapping);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -109,7 +109,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 	@Override
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByUsername(String userName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByUsername {}", kv("userName", userName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByUsername {}", kv("userName", userName));
 			List<UserGroupDetailMapping> userGroupDetailMappingList = iUserGroupDetailMappingRepository
 					.findByUserName(userName);
 			if (userGroupDetailMappingList != null && userGroupDetailMappingList.isEmpty()) {
@@ -117,7 +117,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -125,7 +125,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 	@Override
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByGroupName(String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByGroupName {}",
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByGroupName {}",
 					kv("GroupName", groupName));
 			List<UserGroupDetailMapping> userGroupDetailMappingList = iUserGroupDetailMappingRepository
 					.findByGroupDetailMapping_GroupName(groupName);
@@ -134,7 +134,7 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -142,14 +142,14 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 	@Override
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(String email) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findUserGroupDetailByEmail {}", kv("Email", email));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findUserGroupDetailByEmail {}", kv("Email", email));
 			List<UserGroupDetailMapping> userGroupDetailMappingList = iUserGroupDetailMappingRepository.findByEmail(email);
 			if (userGroupDetailMappingList != null && userGroupDetailMappingList.isEmpty()) {
 				throw new UserNotFoundException("Email", "Email", email);
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(userGroupDetailMappingList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}

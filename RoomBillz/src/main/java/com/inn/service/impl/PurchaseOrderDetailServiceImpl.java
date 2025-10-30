@@ -5,6 +5,7 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,10 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +36,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.inn.customException.PurchaseOrderNotFoundException;
@@ -47,7 +53,8 @@ import com.inn.repository.IInvoiceDetailRepository;
 import com.inn.repository.ILineItemDetailRepository;
 import com.inn.repository.IPurchaseOrderDetailRepository;
 import com.inn.repository.IUserGroupDetailMappingRepository;
-import com.inn.roomConstants.RoomContants;
+import com.inn.roomConstants.RoomConstants;
+import com.inn.roomUtility.RoomUtility;
 import com.inn.service.IGroupDetailService;
 import com.inn.service.IPurchaseOrderDetailService;
 import com.inn.service.IUserRegistrationService;
@@ -83,7 +90,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<ResponseDto> createPurchaseOrder(@Valid PurchaseOrderDetailDto purchaseOrderDetailDto,List<MultipartFile> invoiceFiles) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "createPurchaseOrder {}",kv("PurchaseOrderDetailDto", purchaseOrderDetailDto));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "createPurchaseOrder {}",kv("PurchaseOrderDetailDto", purchaseOrderDetailDto));
 			
 			// Validation for user name and group is the part of that group or not.
 			iUserGroupDetailMappingRepository.findByUserNameAndGroupDetailMapping_GroupName(purchaseOrderDetailDto.getUserName(),purchaseOrderDetailDto.getGroupName())
@@ -108,7 +115,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			purchaseOrderDetail.setMobileNumber(userRegistration.getMobileNumber());
 			purchaseOrderDetail.setGroupId(groupDetail.getGroupId());
 			purchaseOrderDetail.setGroupName(groupDetail.getGroupName());
-			purchaseOrderDetail.setStatus(RoomContants.PENDING);
+			purchaseOrderDetail.setStatus(RoomConstants.PENDING);
 			purchaseOrderDetail.setTotalPrice(getTotalPrice(purchaseOrderDetailDto.getItemDetails()));
 			purchaseOrderDetail.setModeOfPayment(purchaseOrderDetailDto.getModeOfPayment());
 			purchaseOrderDetail.setMonth(purchaseOrderDetailDto.getPurchaseDate().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
@@ -136,7 +143,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
 	       return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("201","Purchase Order saved Successfully."));
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -156,14 +163,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	// Create Invoice Detail
 	public List<InvoiceDetail> setInvoiceFileDetails(List<MultipartFile> files, PurchaseOrderDetail purchaseOrderDetail) {
 	    try {
-	        logger.info(RoomContants.INSIDE_THE_METHOD + "SetInvoiceFileDetails");
+	        logger.info(RoomConstants.INSIDE_THE_METHOD + "SetInvoiceFileDetails");
 
 	        if (files == null || files.isEmpty()) {
 	            throw new RoomBillzException("File list is missing or empty");
 	        }
 
 	        List<InvoiceDetail> invoiceDetailList = new ArrayList<>();
-	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(RoomContants.DATE_FORMAT);
+	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(RoomConstants.DATE_FORMAT);
 	        String datePath = simpleDateFormat.format(new Date());
 
 	        Path path = Paths.get(basePath, datePath);
@@ -206,7 +213,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        logger.error("File saving failed: {}", e.getMessage(), e);
 	        throw new RoomBillzException("Error saving file: " + e.getMessage());
 	    } catch (Exception e) {
-	        logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 	        throw e;
 	    }
 	}
@@ -214,7 +221,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findAllPurchaseOrderDetail() {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findAllPurchaseOrderDetail ");
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findAllPurchaseOrderDetail ");
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findAll();
 			
 			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
@@ -223,7 +230,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -231,12 +238,12 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrderDetailById(Integer id) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailById {}", kv("Id", id));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailById {}", kv("Id", id));
 			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findById(id)
 					                                  .orElseThrow(() -> new PurchaseOrderNotFoundException("Purchase Order Detail", "Id", id.toString()));
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -244,7 +251,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByUserName(String userName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByUserName {}",
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByUserName {}",
 					kv("UserName", userName));
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByUserName(userName);
 			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
@@ -253,7 +260,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -261,7 +268,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByGroupName(String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByGroupName {}",
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByGroupName {}",
 					kv("GroupName", groupName));
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository
 					.findByGroupName(groupName);
@@ -270,7 +277,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -278,7 +285,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrderDetailByPurchaseId(String purchaseId) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByPurchaseId {}",
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByPurchaseId {}",
 					kv("PurchaseId", purchaseId));
 			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
 			if (purchaseOrderDetail == null) {
@@ -286,7 +293,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -294,14 +301,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByMonth(String month) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByMonth {}", kv("Month", month));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByMonth {}", kv("Month", month));
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByMonth(month);
 			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
 				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "Month", month);
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -309,14 +316,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrderDetailByDate(LocalDate date) {
 		try {
-		logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByDate {}", kv("date", date));
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrderDetailByDate {}", kv("date", date));
 		List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByPurchaseDate(date);
 		if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
 			throw new PurchaseOrderNotFoundException("Purchase Order Detail", "Date", date.toString());
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -324,14 +331,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupName(String userName,String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupName {}",kv("UserName", userName),kv("GroupName", groupName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupName {}",kv("UserName", userName),kv("GroupName", groupName));
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByUserNameAndGroupName(userName,groupName);
 			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
 				 throw new RoomBillzException("Purchase Order Detail not Found.");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -339,14 +346,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<PurchaseOrderDetail> findPurchaseOrdByUserAndPurchaseId(String userName, String purchaseId) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndPurchaseId {}",kv("UserName", userName),kv("PurchaseId", purchaseId));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndPurchaseId {}",kv("UserName", userName),kv("PurchaseId", purchaseId));
 			PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByUserNameAndPurchaseId(userName,purchaseId);
 			if (purchaseOrderDetail == null) {
 				throw new RoomBillzException("Purchase Order Detail not Found.");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetail);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -354,14 +361,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserNameAndDate(String userName, LocalDate date) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserNameAndDate {}",kv("UserName", userName),kv("Date", date));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserNameAndDate {}",kv("UserName", userName),kv("Date", date));
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByUserNameAndPurchaseDate( userName,date);
 			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
 				throw new RoomBillzException("Purchase Order Detail not Found.");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -369,14 +376,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<List<PurchaseOrderDetail>> findPurchaseOrdByUserAndGroupAndDate(String userName,String groupName, LocalDate date) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupAndDate {}",kv("UserName", userName),kv("GroupName", groupName),kv("Date", date));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findPurchaseOrdByUserAndGroupAndDate {}",kv("UserName", userName),kv("GroupName", groupName),kv("Date", date));
 			List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByUserNameAndGroupNameAndPurchaseDate(userName,groupName,date);
 			if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
 				throw new RoomBillzException("Purchase Order Detail not Found.");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(purchaseOrderDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -384,7 +391,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Override
 	public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(String purchaseId) {
 	    try {
-	        logger.info("{} downloadPurchaseOrderDetailByPurchaseId {}", RoomContants.INSIDE_THE_METHOD, kv("purchaseId", purchaseId));
+	        logger.info("{} downloadPurchaseOrderDetailByPurchaseId {}", RoomConstants.INSIDE_THE_METHOD, kv("purchaseId", purchaseId));
 	        PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
 	        if (purchaseOrderDetail == null) {
 	            throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
@@ -397,14 +404,14 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        }
 	        return downloadFile(purchaseId, invoiceDetails);
 	    } catch (Exception e) {
-	        logger.error("{} {}", RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+	        logger.error("{} {}", RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 	        throw e;
 	    }
 	}
 
 
 	private ResponseEntity<byte[]> downloadFile(String purchaseId, List<InvoiceDetail> invoiceDetails) {
-	    logger.info("{} downloadFile {}", RoomContants.INSIDE_THE_METHOD, kv("InvoiceDetails", invoiceDetails));
+	    logger.info("{} downloadFile {}", RoomConstants.INSIDE_THE_METHOD, kv("InvoiceDetails", invoiceDetails));
 	    HttpHeaders headers = new HttpHeaders();
 	    try {
 	        // ✅ Single file
@@ -457,11 +464,112 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    }
 	}
 
+	@Override
+	public ResponseEntity<ResponseDto> deletePurchaseOrderDetailByPurchaseId(String purchaseId) {
+	    logger.info("{} deletePurchaseOrderDetailByPurchaseId {}", RoomConstants.INSIDE_THE_METHOD, kv("purchaseId", purchaseId));
+	    try {
+	        PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
+	        if (purchaseOrderDetail == null) {
+	            throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
+	        }
+	        iPurchaseOrderDetailRepository.delete(purchaseOrderDetail);
+	        logger.info("Purchase order deleted successfully for purchaseId: {}", purchaseId);
+	        return ResponseEntity
+	                .status(HttpStatus.OK)
+	                .body(new ResponseDto("200", "Purchase Order deleted successfully."));
+	    } catch (PurchaseOrderNotFoundException ex) {
+	        logger.warn("Purchase order not found for purchaseId: {}", purchaseId);
+	        throw ex; 
+	    } catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()), e);
+	        throw e;
+	    }
+	}
 
-
+	@Override
+	public ResponseEntity<byte[]> exportPODetailByUsernameGroupAndMonthWise(String username, String groupName,String month) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailByUsernameGroupAndMonthWise {}",kv("Username", username),kv("GroupName", groupName),kv("Month", month));
+			List<PurchaseOrderDetail> purchaseOrderDetails = iPurchaseOrderDetailRepository.findByUserNameAndGroupNameAndMonth(username, groupName, month);
+			if (purchaseOrderDetails == null || purchaseOrderDetails.isEmpty()) {
+	            throw new RoomBillzException("Purchase Order Details not found");
+	        }
+			
+			
+			
+			return null;
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			throw e;
+		}
+	}
 	
+	ResponseEntity<byte[]> generateExcelReport(List<PurchaseOrderDetail> purchaseOrderDetails) throws Exception {
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "generateExcelReport");
+	    try {
+	      SXSSFWorkbook workbook = null;
+	      Date date = new Date();
+	      SimpleDateFormat sdf = new SimpleDateFormat(RoomConstants.DATE_TIME);
+	      String folder = sdf.format(date);
+	      String downloadPath = RoomConstants.DOWNLOAD_EXCEL_SHEET_PO_DETAIL_PATH + folder + File.separator;
+	      File createFolder = new File(downloadPath);
+	      if (!createFolder.exists()) {
+	        createFolder.mkdirs();
+	      }
+	      logger.info("Download Path {}", kv("DownloadPath", downloadPath));
+	      File file = ResourceUtils.getFile("classpath:PurchaseOrderSampleFile.xlsx");
+	      String sampleFilePath = file.getAbsolutePath();
+	      logger.info("sampleFilePath Detail  {}", kv("SampleFilePath", sampleFilePath));
+	      String downloadedFileName = "PurchaseOrderDetailResult.xlsx";
+	      FileInputStream fileInputStream = new FileInputStream(sampleFilePath);
+	      XSSFWorkbook wbTemplate = new XSSFWorkbook(fileInputStream);
+	      workbook = new SXSSFWorkbook(wbTemplate);
+	      workbook.setCompressTempFiles(true);
+	      SXSSFSheet workSheet = workbook.getSheetAt(0);
+	      workSheet.setRandomAccessWindowSize(1000);
+	      Integer rowIndex = 1;
+	      for (PurchaseOrderDetail poDetail : purchaseOrderDetails) {
+	        rowIndex = populateWorkSheetCellData(workSheet, rowIndex, poDetail);
+	      }
+	      FileOutputStream outputStream = new FileOutputStream(new File(downloadPath + downloadedFileName));
+	      workbook.write(outputStream);
+	      outputStream.close();
+	      logger.info("Full file path and file name {}", kv("Full path ", downloadPath + downloadedFileName));
+	      return RoomUtility.downloadFile(downloadPath + downloadedFileName);
+	    } catch (Exception e) {
+	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Exception", e.getMessage()));
+	      throw e;
+	    }
+	  }
 
+	  private Integer populateWorkSheetCellData(SXSSFSheet workSheet, Integer rowIndex,PurchaseOrderDetail poDetail) {
+		  logger.info(RoomConstants.INSIDE_THE_METHOD, "populateWorkSheetCellData");
+	    try {
+	      Row row = workSheet.getRow(rowIndex);
+	      if (row == null) {
+	        row = workSheet.createRow(rowIndex);
+	      }
+	      List<String> cellValueList = new ArrayList<>();
+	      cellValueList.add(poDetail.getId().toString());
+	      cellValueList.add(poDetail.getUserName());
+	      cellValueList.add(poDetail.getUserName());
+	      cellValueList.add(poDetail.getFirstName());
+	      cellValueList.add(poDetail.getEmail());
+	      cellValueList.add(poDetail.getMobileNumber());
+	      cellValueList.add(poDetail.getPurchaseId());
+	      cellValueList.add(poDetail.getPurchaseDate().toString());
+	      cellValueList.add(poDetail.getGroupName());
+	      cellValueList.add(poDetail.getStatus());
+	      cellValueList.add(poDetail.getModeOfPayment());
+	      cellValueList.add(poDetail.getMonth());
+	      cellValueList.add(poDetail.getTotalPrice().toString());
+	      RoomUtility.cellRender(cellValueList, row);
+	      return ++rowIndex;
+	    } catch (Exception e) {
+	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Exception", e.getMessage()));
+	      throw e;
+	    }
+	  }
 
-	
 	
 }

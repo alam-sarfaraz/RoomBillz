@@ -19,7 +19,7 @@ import com.inn.dto.GroupDetailDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.GroupDetail;
 import com.inn.repository.IGroupDetailRepository;
-import com.inn.roomConstants.RoomContants;
+import com.inn.roomConstants.RoomConstants;
 import com.inn.roomUtility.RoomUtility;
 import com.inn.service.IGroupDetailService;
 
@@ -34,7 +34,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 	@Override
 	public ResponseEntity<ResponseDto> createGroupDetail(GroupDetailDto groupDetailDto) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "createGroupDetail {}", kv("GroupDetailDto",groupDetailDto));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "createGroupDetail {}", kv("GroupDetailDto",groupDetailDto));
 			Optional<GroupDetail> groupName = iGroupDetailRepository.findByGroupName(groupDetailDto.getGroupName());
 			if(groupName.isPresent()) {
 				throw new GroupAlreadyExistException(String.format("%s group detail already exist.",groupDetailDto.getGroupName()));
@@ -44,13 +44,13 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new ResponseDto("201", "UserRegistration Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
 	
 	public GroupDetail mapToGroupDetail(GroupDetailDto groupDetailDto,GroupDetail groupDetail) {
-		logger.info(RoomContants.INSIDE_THE_METHOD + "mapToGroupDetail {}",kv("GroupDetailDto",groupDetailDto));
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "mapToGroupDetail {}",kv("GroupDetailDto",groupDetailDto));
 		groupDetail.setGroupName(groupDetailDto.getGroupName());
 		String groupId = RoomUtility.generateCode();
 		groupDetail.setGroupId(groupId);
@@ -62,13 +62,13 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 	@Override
 	public ResponseEntity<GroupDetail> findGroupDetailById(Integer id) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findGroupDetailById {}", kv("Id", id));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findGroupDetailById {}", kv("Id", id));
 			 GroupDetail groupDetail = iGroupDetailRepository.findById(id)
 					.orElseThrow(() -> new GroupNotFoundException("Group Detail", "Id", id.toString()));
 			 return ResponseEntity.status(HttpStatus.OK)
 						.body(groupDetail);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -76,20 +76,20 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 	@Override
 	public ResponseEntity<GroupDetail> findByGroupName(String groupName) {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findByUserName {}", kv("GroupName", groupName));
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findByUserName {}", kv("GroupName", groupName));
 			GroupDetail groupDetail = iGroupDetailRepository.findByGroupName(groupName)
 					.orElseThrow(() -> new GroupNotFoundException("Group Detail", "GroupName", groupName));
 			 return ResponseEntity.status(HttpStatus.OK)
 						.body(groupDetail);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
 	
 	@Override
 	public ResponseEntity<ResponseDto> deleteGroupById(Integer id) {
-		logger.info(RoomContants.INSIDE_THE_METHOD + "deleteGroupById {}",kv("Id",id));
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteGroupById {}",kv("Id",id));
 		try {
 			if (!iGroupDetailRepository.existsById(id)) {
 				throw new GroupNotFoundException("Group Detail", "Id", id.toString());
@@ -98,14 +98,14 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseDto("200", "Group Deleted Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
 	
 	@Override
 	public ResponseEntity<ResponseDto> deleteByGroupName(String groupName) {
-		logger.info(RoomContants.INSIDE_THE_METHOD + "deleteByGroupName {}", kv("GroupName", groupName));
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteByGroupName {}", kv("GroupName", groupName));
 		try {
 			GroupDetail groupDetail = iGroupDetailRepository.findByGroupName(groupName)
 					.orElseThrow(() -> new GroupNotFoundException("Group Detail", "GroupName", groupName));
@@ -113,7 +113,7 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 			return ResponseEntity.status(HttpStatus.OK)
 					             .body(new ResponseDto("200", "Group Deleted Successfully..."));
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}
@@ -121,14 +121,14 @@ public class GroupDetailServiceImpl implements IGroupDetailService{
 	@Override
 	public ResponseEntity<List<GroupDetail>> findAllGroupDetail() {
 		try {
-			logger.info(RoomContants.INSIDE_THE_METHOD + "findAllGroupDetail ");
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "findAllGroupDetail ");
 			List<GroupDetail> groupDetailList = iGroupDetailRepository.findAll();
 			if (groupDetailList == null || groupDetailList.isEmpty()) {
 				throw new RoomBillzException("No groups are present.");
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(groupDetailList);
 		} catch (Exception e) {
-			logger.error(RoomContants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv("Error Message", e.getMessage()));
 			throw e;
 		}
 	}

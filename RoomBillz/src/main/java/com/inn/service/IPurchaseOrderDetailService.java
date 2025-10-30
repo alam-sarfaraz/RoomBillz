@@ -40,6 +40,10 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<byte[]> downloadPurchaseOrderDetailByPurchaseId(String purchaseId);
 
+	public ResponseEntity<ResponseDto> deletePurchaseOrderDetailByPurchaseId(String purchaseId);
+
+	public ResponseEntity<byte[]> exportPODetailByUsernameGroupAndMonthWise(String username, String groupName,String month);
+
 	
 
 }

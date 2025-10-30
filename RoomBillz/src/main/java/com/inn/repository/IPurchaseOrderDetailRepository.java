@@ -32,5 +32,7 @@ public interface IPurchaseOrderDetailRepository extends JpaRepository<PurchaseOr
 	List<PurchaseOrderDetail> findByUserNameAndPurchaseDate(String userName, LocalDate date);
 
 	List<PurchaseOrderDetail> findByUserNameAndGroupNameAndPurchaseDate(String userName,String groupName, LocalDate date);
+	
+	List<PurchaseOrderDetail> findByUserNameAndGroupNameAndMonth(String userName,String groupName, String month);
 
 }
