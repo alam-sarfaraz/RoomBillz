@@ -30,6 +30,10 @@ spring:
 invoice:
     upload:
       path: "D:\\RoomBillz_Document\\Invoice\\"
+      
+download:
+    excelReport:    
+      path: "D:\\RoomBillz_Document\\ExcelReport\\"
      
 
 

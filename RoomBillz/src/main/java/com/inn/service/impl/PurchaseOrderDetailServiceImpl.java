@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,21 +23,21 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.inn.customException.PurchaseOrderNotFoundException;
@@ -86,6 +87,9 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	
 	@Value("${invoice.upload.path}")
 	private String basePath;
+	
+	@Value("${download.excelReport.path}")
+	private String excelBasePath;
 
 	@Override
 	public ResponseEntity<ResponseDto> createPurchaseOrder(@Valid PurchaseOrderDetailDto purchaseOrderDetailDto,List<MultipartFile> invoiceFiles) {
@@ -494,35 +498,30 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			if (purchaseOrderDetails == null || purchaseOrderDetails.isEmpty()) {
 	            throw new RoomBillzException("Purchase Order Details not found");
 	        }
-			
-			
-			
-			return null;
+			return generateExcelReport(username,purchaseOrderDetails);
 		} catch (Exception e) {
-			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
-			throw e;
-		}
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        throw e;
+	    }
 	}
 	
-	ResponseEntity<byte[]> generateExcelReport(List<PurchaseOrderDetail> purchaseOrderDetails) throws Exception {
+	ResponseEntity<byte[]> generateExcelReport(String username,List<PurchaseOrderDetail> purchaseOrderDetails) {
 		logger.info(RoomConstants.INSIDE_THE_METHOD + "generateExcelReport");
 	    try {
 	      SXSSFWorkbook workbook = null;
+	      String downloadedFileName = username+".xlsx";
 	      Date date = new Date();
 	      SimpleDateFormat sdf = new SimpleDateFormat(RoomConstants.DATE_TIME);
 	      String folder = sdf.format(date);
-	      String downloadPath = RoomConstants.DOWNLOAD_EXCEL_SHEET_PO_DETAIL_PATH + folder + File.separator;
+	      String downloadPath = excelBasePath + folder + File.separator;
 	      File createFolder = new File(downloadPath);
 	      if (!createFolder.exists()) {
 	        createFolder.mkdirs();
 	      }
 	      logger.info("Download Path {}", kv("DownloadPath", downloadPath));
-	      File file = ResourceUtils.getFile("classpath:PurchaseOrderSampleFile.xlsx");
-	      String sampleFilePath = file.getAbsolutePath();
-	      logger.info("sampleFilePath Detail  {}", kv("SampleFilePath", sampleFilePath));
-	      String downloadedFileName = "PurchaseOrderDetailResult.xlsx";
-	      FileInputStream fileInputStream = new FileInputStream(sampleFilePath);
-	      XSSFWorkbook wbTemplate = new XSSFWorkbook(fileInputStream);
+	      ClassPathResource resource = new ClassPathResource("static/PurchaseOrderSampleFile.xlsx");
+	      InputStream inputStream = resource.getInputStream();
+	      XSSFWorkbook wbTemplate = new XSSFWorkbook(inputStream);
 	      workbook = new SXSSFWorkbook(wbTemplate);
 	      workbook.setCompressTempFiles(true);
 	      SXSSFSheet workSheet = workbook.getSheetAt(0);
@@ -536,9 +535,12 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	      outputStream.close();
 	      logger.info("Full file path and file name {}", kv("Full path ", downloadPath + downloadedFileName));
 	      return RoomUtility.downloadFile(downloadPath + downloadedFileName);
+	    } catch (IOException e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        throw new RoomBillzException("Error while generating Excel file");
 	    } catch (Exception e) {
-	    	logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
-	      throw e;
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        throw e;
 	    }
 	  }
 
@@ -552,7 +554,6 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	      List<String> cellValueList = new ArrayList<>();
 	      cellValueList.add(poDetail.getId().toString());
 	      cellValueList.add(poDetail.getUserName());
-	      cellValueList.add(poDetail.getUserName());
 	      cellValueList.add(poDetail.getFirstName());
 	      cellValueList.add(poDetail.getEmail());
 	      cellValueList.add(poDetail.getMobileNumber());
@@ -562,7 +563,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	      cellValueList.add(poDetail.getStatus());
 	      cellValueList.add(poDetail.getModeOfPayment());
 	      cellValueList.add(poDetail.getMonth());
-	      cellValueList.add(poDetail.getTotalPrice().toString());
+	      cellValueList.add(poDetail.getTotalPrice()!=null?poDetail.getTotalPrice().toString():"00.00");
 	      RoomUtility.cellRender(cellValueList, row);
 	      return ++rowIndex;
 	    } catch (Exception e) {
