@@ -22,6 +22,8 @@ public interface IPurchaseOrderDetailRepository extends JpaRepository<PurchaseOr
 	PurchaseOrderDetail findByPurchaseId(String purchaseId);
 
 	List<PurchaseOrderDetail> findByMonth(String month);
+	
+	List<PurchaseOrderDetail> findByStatus(String status);
 
 	List<PurchaseOrderDetail> findByUserNameAndGroupName(String userName, String groupName);
 

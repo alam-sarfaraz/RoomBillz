@@ -207,6 +207,25 @@ public interface IPurchaseOrderDetailController {
 				                                                  @RequestParam(name = "status") String status,
 				                                                  @Parameter(description = "Month for which Purchase Order details are to be exported (format: August)",example = "August")
 				                                                  @RequestParam(name = "month") String month);
+	
+	@Operation(summary = "Export Purchase Order Details by Month",description = "Exports Purchase Order details based on the provided month.")
+		@ApiResponses(value = {
+		    @ApiResponse(responseCode = "200",description = "Purchase Order details exported successfully",content = @Content(mediaType = "application/octet-stream")),
+		    @ApiResponse(responseCode = "404",description = "No Purchase Order details found for the given month",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+		    @ApiResponse(responseCode = "500",description = "Internal Server Error",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))})
+	@GetMapping(path = "/exportPODetailsByMonth",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	ResponseEntity<byte[]> exportPODetailsByMonth(@Parameter(description = "Month for which Purchase Order details are to be exported (e.g., August)",example = "August",required = true)
+		                                          @RequestParam(name = "month") String month);
+	
+	@Operation(summary = "Export Purchase Order Details by Status",description = "Exports Purchase Order details based on the provided Status.")
+	@ApiResponses(value = {
+	    @ApiResponse(responseCode = "200",description = "Purchase Order details exported successfully",content = @Content(mediaType = "application/octet-stream")),
+	    @ApiResponse(responseCode = "404",description = "No Purchase Order details found for the given Status",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+	    @ApiResponse(responseCode = "500",description = "Internal Server Error",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))})
+    @GetMapping(path = "/exportPODetailStatus",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    ResponseEntity<byte[]> exportPODetailStatus(@Parameter(description = "Status for which Purchase Order details are to be exported (e.g., Status)",example = "Pending",required = true)
+	                                            @RequestParam(name = "status") String status);
+	
 
 
 

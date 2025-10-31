@@ -232,4 +232,29 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 		}
 	}
 
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<byte[]> exportPODetailsByMonth(String month) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailsByMonth {}",kv("Month", month));
+			return iPurchaseOrderDetailService.exportPODetailsByMonth(month);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<byte[]> exportPODetailStatus(String status) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailStatus {}",kv("Status", status));
+			return iPurchaseOrderDetailService.exportPODetailStatus(status);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
 }

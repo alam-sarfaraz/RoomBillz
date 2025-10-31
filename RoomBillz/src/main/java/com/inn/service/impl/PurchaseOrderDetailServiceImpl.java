@@ -587,5 +587,35 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    }
 	}
 
+	@Override
+	public ResponseEntity<byte[]> exportPODetailsByMonth(String month) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailsByMonth {}",kv("Month", month));
+			List<PurchaseOrderDetail> purchaseOrderDetails = iPurchaseOrderDetailRepository.findByMonth(month);
+			if (purchaseOrderDetails == null || purchaseOrderDetails.isEmpty()) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Detail", "Month", month);
+	        }
+			return generateExcelReport(month,purchaseOrderDetails);
+		} catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        throw e;
+	    }
+	}
+
+	@Override
+	public ResponseEntity<byte[]> exportPODetailStatus(String status) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailStatus {}",kv("Status", status));
+			List<PurchaseOrderDetail> purchaseOrderDetails = iPurchaseOrderDetailRepository.findByStatus(status);
+			if (purchaseOrderDetails == null || purchaseOrderDetails.isEmpty()) {
+				throw new PurchaseOrderNotFoundException("Purchase Order Details", "Status", status);
+	        }
+			return generateExcelReport(status,purchaseOrderDetails);
+		} catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        throw e;
+	    }
+	}
+
 	
 }
