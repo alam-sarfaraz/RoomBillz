@@ -572,5 +572,20 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    }
 	  }
 
+	@Override
+	public ResponseEntity<byte[]> exportPODetailByUsernameGroupStatusAndMonthWise(String username, String groupName,String status, String month) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailByUsernameGroupStatusAndMonthWise {}",kv("Username", username),kv("GroupName", groupName),kv("Status", status),kv("Month", month));
+			List<PurchaseOrderDetail> purchaseOrderDetails = iPurchaseOrderDetailRepository.findByUserNameAndGroupNameAndStatusAndMonth(username, groupName,status, month);
+			if (purchaseOrderDetails == null || purchaseOrderDetails.isEmpty()) {
+	            throw new RoomBillzException("Purchase Order Details not found");
+	        }
+			return generateExcelReport(username,purchaseOrderDetails);
+		} catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        throw e;
+	    }
+	}
+
 	
 }

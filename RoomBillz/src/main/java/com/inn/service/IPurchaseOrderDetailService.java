@@ -44,6 +44,8 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<byte[]> exportPODetailByUsernameGroupAndMonthWise(String username, String groupName,String month);
 
+	public ResponseEntity<byte[]> exportPODetailByUsernameGroupStatusAndMonthWise(String username, String groupName,String status, String month);
+
 	
 
 }

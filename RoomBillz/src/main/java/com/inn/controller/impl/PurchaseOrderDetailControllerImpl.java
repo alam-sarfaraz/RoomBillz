@@ -219,5 +219,17 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 			throw e;
 		}
 	}
+	
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<byte[]> exportPODetailByUsernameGroupStatusAndMonthWise(String username, String groupName,String status,String month) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportPODetailByUsernameGroupStatusAndMonthWise {}",kv("Username", username),kv("GroupName", groupName),kv("Status", status),kv("Month", month));
+			return iPurchaseOrderDetailService.exportPODetailByUsernameGroupStatusAndMonthWise(username,groupName,status,month);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
 
 }

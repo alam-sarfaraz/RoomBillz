@@ -235,8 +235,27 @@ public interface IPurchaseOrderDetailController {
 			                                                                 @RequestParam(name = "username", required = true) String username,
                                                                              @Parameter(description = "Group name associated with the Purchase Orders", example = "RoomBillz")
 			                                                                 @RequestParam(name = "groupName", required = true) String groupName,
-                                                                             @Parameter(description = "Month for which Purchase Order Details are to be exported (format: MMM-yyyy or MM-yyyy)", example = "August")
+                                                                             @Parameter(description = "Month for which Purchase Order Details are to be exported (format: August)", example = "August")
 			                                                                 @RequestParam(name = "month", required = true) String month);
+			
+			@Operation(summary = "Export Purchase Order Details by Username, Group Name, Status, and Month",description = "Exports Purchase Order details based on the provided Username, Group Name, Status, and Month.")
+			 @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Purchase Order details exported successfully",
+				        content = @Content(mediaType = "application/octet-stream")),
+				    @ApiResponse(responseCode = "404",description = "No Purchase Order details found for the given criteria",
+				        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+				    @ApiResponse(responseCode = "500",description = "Internal Server Error",
+				        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+			 })
+			@GetMapping(path = "/exportPODetailByUsernameGroupStatusAndMonthWise",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+			ResponseEntity<byte[]> exportPODetailByUsernameGroupStatusAndMonthWise(@Parameter(description = "Username of the requester or owner of the Purchase Orders",example = "sarfarazalam")
+				                                                  @RequestParam(name = "username") String username,
+                                                                  @Parameter(description = "Group name associated with the Purchase Orders",example = "RoomBillz")
+				                                                  @RequestParam(name = "groupName") String groupName,
+                                                                  @Parameter(description = "Status of the Purchase Orders (e.g., PENDING, APPROVED, REJECTED, PARTIALLY_APPROVED)",example = "Pending")
+				                                                  @RequestParam(name = "status") String status,
+				                                                  @Parameter(description = "Month for which Purchase Order details are to be exported (format: August)",example = "August")
+				                                                  @RequestParam(name = "month") String month);
+
 
 
 }
