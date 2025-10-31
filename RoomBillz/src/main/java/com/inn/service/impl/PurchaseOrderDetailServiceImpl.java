@@ -509,7 +509,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 		logger.info(RoomConstants.INSIDE_THE_METHOD + "generateExcelReport");
 	    try {
 	      SXSSFWorkbook workbook = null;
-	      String downloadedFileName = username+".xlsx";
+	      String downloadedFileName = username+"_"+RoomUtility.dateFormatter()+".xlsx";
 	      Date date = new Date();
 	      SimpleDateFormat sdf = new SimpleDateFormat(RoomConstants.DATE_TIME);
 	      String folder = sdf.format(date);
@@ -545,7 +545,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	  }
 
 	  private Integer populateWorkSheetCellData(SXSSFSheet workSheet, Integer rowIndex,PurchaseOrderDetail poDetail) {
-		  logger.info(RoomConstants.INSIDE_THE_METHOD, "populateWorkSheetCellData");
+		  logger.info(RoomConstants.INSIDE_THE_METHOD+"populateWorkSheetCellData {}",rowIndex);
 	    try {
 	      Row row = workSheet.getRow(rowIndex);
 	      if (row == null) {
