@@ -2,6 +2,7 @@ package com.inn.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,5 +39,7 @@ public interface IPurchaseOrderDetailRepository extends JpaRepository<PurchaseOr
 	List<PurchaseOrderDetail> findByUserNameAndGroupNameAndMonth(String userName,String groupName, String month);
 	
 	List<PurchaseOrderDetail> findByUserNameAndGroupNameAndStatusAndMonth(String userName,String groupName,String status, String month);
+	
+	Optional<PurchaseOrderDetail> findTopByStatusOrderByCreatedAtAsc(String status);
 
 }

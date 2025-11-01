@@ -52,6 +52,8 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<ResponseDto> updatePODetailStatusByPurchaseId(String purchaseId, String status);
 
+	public ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate();
+
 	
 
 }

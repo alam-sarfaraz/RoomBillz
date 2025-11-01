@@ -270,4 +270,17 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 		}
 	}
 
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate() {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "getPurchaseOrderDetailsByCreatedDate");
+			return iPurchaseOrderDetailService.getPurchaseOrderDetailsByCreatedDate();
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
 }

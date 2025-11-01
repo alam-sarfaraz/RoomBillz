@@ -238,7 +238,13 @@ public interface IPurchaseOrderDetailController {
     	                                                         @Parameter(description = "New status to set for the Purchase Order",example = "Approved",required = true)
     	                                                         @RequestParam(name = "status") String status);
 
-	
+	@Operation(summary = "Get Purchase Order Detail by Created Date", description = "Retrieves Purchase Order detail based on the provided Created Date.")
+	    @ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Purchase Order detail retrieved successfully", content = @Content(mediaType = "application/json")),
+			@ApiResponse(responseCode = "404", description = "No Purchase Order detail found for the given Created Date", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping(path = "/getPurchaseOrderDetailsByCreatedDate", produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate();
 
 
 

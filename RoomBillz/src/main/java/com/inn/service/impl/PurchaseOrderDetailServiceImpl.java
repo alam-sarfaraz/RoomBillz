@@ -640,6 +640,25 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    }
 	}
 
+	@Override
+	public ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate() {
+	    try {
+	        logger.info(RoomConstants.INSIDE_THE_METHOD + "getPurchaseOrderDetailsByCreatedDate");
+	        Optional<PurchaseOrderDetail> purchaseOrderDetailOpt = iPurchaseOrderDetailRepository.findTopByStatusOrderByCreatedAtAsc(RoomConstants.PENDING);
+	        if (purchaseOrderDetailOpt.isPresent()) {
+	            logger.info("First created PurchaseOrderDetail found: {}", kv("purchaseId", purchaseOrderDetailOpt.get().getPurchaseId()));
+	            return ResponseEntity.ok(purchaseOrderDetailOpt.get());
+	        } else {
+	            logger.warn("No PurchaseOrderDetail found");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	        }
+	    } catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
+
 
 	
 }
