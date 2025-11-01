@@ -50,6 +50,8 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<byte[]> exportPODetailStatus(String status);
 
+	public ResponseEntity<ResponseDto> updatePODetailStatusByPurchaseId(String purchaseId, String status);
+
 	
 
 }

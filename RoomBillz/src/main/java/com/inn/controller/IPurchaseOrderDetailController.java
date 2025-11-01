@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -225,6 +226,18 @@ public interface IPurchaseOrderDetailController {
     @GetMapping(path = "/exportPODetailStatus",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     ResponseEntity<byte[]> exportPODetailStatus(@Parameter(description = "Status for which Purchase Order details are to be exported (e.g., Status)",example = "Pending",required = true)
 	                                            @RequestParam(name = "status") String status);
+    
+    @Operation(summary = "Update Purchase Order Detail Status by Purchase ID",description = "Updates the status of a Purchase Order Detail using the provided Purchase ID.")
+    	@ApiResponses(value = {
+    	    @ApiResponse(responseCode = "200",description = "Purchase Order status updated successfully",content = @Content(mediaType = "application/json")),
+    	    @ApiResponse(responseCode = "404",description = "No Purchase Order found for the given Purchase ID",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+    	    @ApiResponse(responseCode = "500",description = "Internal Server Error",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))})
+    @PutMapping(path = "/updatePODetailStatusByPurchaseId", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ResponseDto> updatePODetailStatusByPurchaseId(@Parameter(description = "Purchase ID of the Purchase Order to update",example = "PO-00000",required = true)
+    	                                                         @RequestParam(name = "purchaseId") String purchaseId,
+    	                                                         @Parameter(description = "New status to set for the Purchase Order",example = "Approved",required = true)
+    	                                                         @RequestParam(name = "status") String status);
+
 	
 
 

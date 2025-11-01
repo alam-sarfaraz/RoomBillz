@@ -257,4 +257,17 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 		}
 	}
 
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<ResponseDto> updatePODetailStatusByPurchaseId(String purchaseId, String status) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "updatePODetailStatusByPurchaseId {}",kv("PurchaseId", purchaseId),kv("Status", status));
+			return iPurchaseOrderDetailService.updatePODetailStatusByPurchaseId(purchaseId,status);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
 }

@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -616,6 +617,29 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        throw e;
 	    }
 	}
+
+	@Override
+	public ResponseEntity<ResponseDto> updatePODetailStatusByPurchaseId(String purchaseId, String status) {
+	    try {
+	        logger.info("{} updatePODetailStatusByPurchaseId {}", RoomConstants.INSIDE_THE_METHOD,kv("PurchaseId", purchaseId), kv("Status", status));
+	        PurchaseOrderDetail purchaseOrderDetail = iPurchaseOrderDetailRepository.findByPurchaseId(purchaseId);
+	        if (purchaseOrderDetail == null) {
+	            throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
+	        }
+	        List<String> validStatusList = Arrays.asList(RoomConstants.PENDING,RoomConstants.REJECTED,RoomConstants.APPROVED,RoomConstants.PARTIALLY_APPROVED);
+	        if (!validStatusList.contains(status)) {
+	            throw new RoomBillzException("Invalid status provided: " + status);
+	        }
+	        purchaseOrderDetail.setStatus(status);
+	        iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
+	        logger.info("Purchase Order status updated successfully for PurchaseId: {}", purchaseId);
+	        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("200", "Purchase Order status updated successfully."));
+	    } catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+	        throw e;
+	    }
+	}
+
 
 	
 }
