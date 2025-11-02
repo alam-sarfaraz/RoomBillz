@@ -86,4 +86,28 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 		}
 	}
 
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<byte[]> exportUserGroupDetailMappingByGroupName(String groupName) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportUserGroupDetailMappingByGroupName {}",kv("GroupName",groupName));
+			return iUserGroupRegistrationService.exportUserGroupDetailMappingByGroupName(groupName);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<byte[]> exportUserGroupDetailMappingByUsername(String username) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "exportUserGroupDetailMappingByUsername {}",kv("Username",username));
+			return iUserGroupRegistrationService.exportUserGroupDetailMappingByUsername(username);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
 }

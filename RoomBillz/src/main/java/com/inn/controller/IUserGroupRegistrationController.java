@@ -95,6 +95,23 @@ public interface IUserGroupRegistrationController {
     @GetMapping(path = "/findUserGroupDetailByEmail")
     ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(@Parameter(description = "Email",example = "sarfarazalam@example.com") @RequestParam(name = "email") String email);
 	
+	@Operation(summary = "Export User Group Detail Mappings by Group Name", description = "Exports User Group Detail Mappings data based on the provided Group Name.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User Group Detail Mapping exported successfully", content = @Content(mediaType = "application/octet-stream")),
+			@ApiResponse(responseCode = "404", description = "No User Group Detail Mapping found for the given Group Name", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping(path = "/exportUserGroupDetailMappingByGroupName", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	ResponseEntity<byte[]> exportUserGroupDetailMappingByGroupName(@Parameter(description = "Group name associated with the User Group Detail Mapping", example = "RoomBillz") 
+	                                                               @RequestParam(name = "groupName") String groupName);
 	
+	@Operation(summary = "Export User Group Detail Mapping by Username", description = "Exports User Group Detail Mapping data based on the provided username.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User Group Detail Mapping exported successfully", content = @Content(mediaType = "application/octet-stream")),
+			@ApiResponse(responseCode = "404", description = "No User Group Detail Mapping found for the given username", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping(path = "/exportUserGroupDetailMappingByUsername", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	ResponseEntity<byte[]> exportUserGroupDetailMappingByUsername(@Parameter(description = "Username associated with the User Group Detail Mapping", example = "sarfarazalam") 
+	                                                              @RequestParam(name = "username") String username);
+
 
 }

@@ -20,4 +20,8 @@ public interface IUserGroupRegistrationService {
 
 	public ResponseEntity<List<UserGroupDetailMapping>> findUserGroupDetailByEmail(String email);
 
+	public ResponseEntity<byte[]> exportUserGroupDetailMappingByGroupName(String groupName);
+
+	public ResponseEntity<byte[]> exportUserGroupDetailMappingByUsername(String username);
+
 }
