@@ -3,10 +3,10 @@ server:
 
 spring:
   application:
-    name: ROOM_BILLZ
+    name: ROOM-BILLZ
   devtools:
     restart:
-      enabled: true       # Ensures automatic restart on classpath changes
+      enabled: true
     livereload:
       enabled: true     
   datasource:
@@ -17,7 +17,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update   # Options: none, validate, update, create, create-drop
+      ddl-auto: update
     show-sql: false
     database-platform: org.hibernate.dialect.MySQL8Dialect
  
