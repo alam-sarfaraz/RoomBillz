@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.servers.Server;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
@@ -16,8 +18,8 @@ import io.swagger.v3.oas.annotations.info.License;
 @OpenAPIDefinition(
 	    info = @Info(
 	        title = "RoomBillz Application",
-	        description = "Welcome to ROOMBILLZ Application. Smart Room & Expense Split Manager",
 	        version = "v1",
+	        description = "Welcome to ROOMBILLZ Application — Smart Room & Expense Split Manager. This application helps users manage rooms, track expenses, and split bills seamlessly within groups.",
 	        contact = @Contact(
 	            name = "Sarfaraz Alam",
 	            email = "sarfarazalam2702@gmail.com",
@@ -27,6 +29,14 @@ import io.swagger.v3.oas.annotations.info.License;
 	            name = "Apache 2.0",
 	            url = "http://www.apache.org/licenses/LICENSE-2.0.html"
 	        )
+	    ),
+	    servers = {
+	        @Server(url = "http://localhost:8081", description = "Local Development Server"),
+	        @Server(url = "https://api.roombillz.com", description = "Production Server")
+	    },
+	    externalDocs = @ExternalDocumentation(
+	        description = "RoomBillz API Reference and Documentation",
+	        url = "https://roombillz.com/docs"
 	    )
 	)
 public class RoomBillzApplication {
