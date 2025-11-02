@@ -1,14 +1,12 @@
 server:
   port: 8081
-
+  servlet:
+    context-path: /api/v1/roomBillz
+    
 spring:
   application:
-    name: ROOM-BILLZ
-  devtools:
-    restart:
-      enabled: true
-    livereload:
-      enabled: true     
+    name: ROOMBILLZ-SERVICE
+       
   datasource:
     url: jdbc:mysql://localhost:3306/roombillz
     username: root
@@ -37,4 +35,12 @@ download:
     excelGroupReport:    
       path: "D:\\RoomBillz_Document\\ExcelGroupReport\\"
     
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 

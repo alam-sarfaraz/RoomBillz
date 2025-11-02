@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @Tag(name = "User Registration Controller", description = "APIs for managing user registration in RoomBillz")
-@RequestMapping(path ="/api/v1/roomBillz", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path ="/userRegistration", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public interface IUserRegistrationController {
 

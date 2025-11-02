@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @Tag(name = "User Group Registration Controller", description = "APIs for managing User Group Registration in RoomBillz")
-@RequestMapping(path ="/api/v1/roomBillz", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path ="/userGroupRegistration", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public interface IUserGroupRegistrationController {
 	

@@ -31,14 +31,25 @@ import io.swagger.v3.oas.annotations.servers.Server;
 	        )
 	    ),
 	    servers = {
-	        @Server(url = "http://localhost:8081", description = "Local Development Server"),
-	        @Server(url = "https://api.roombillz.com", description = "Production Server")
+	        @Server(
+	            url = "http://localhost:8081/api/v1/roomBillz",
+	            description = "Local Development Server"
+	        ),
+	        @Server(
+		            url = "https://qa/api.roombillz.com/api/v1/roomBillz",
+		            description = "QA Server"
+		        ),
+	        @Server(
+	            url = "https://api.roombillz.com/api/v1/roomBillz",
+	            description = "Production Server"
+	        )
 	    },
 	    externalDocs = @ExternalDocumentation(
 	        description = "RoomBillz API Reference and Documentation",
 	        url = "https://roombillz.com/docs"
 	    )
 	)
+
 public class RoomBillzApplication {
 
 	public static void main(String[] args) {

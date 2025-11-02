@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @Tag(name = "Purchase Order Detail Controller", description = "APIs for managing user Purchase Order Detail in RoomBillz")
-@RequestMapping(path ="/api/v1/roomBillz")
+@RequestMapping(path ="/purchaseOrderDetail")
 @Validated
 public interface IPurchaseOrderDetailController {
 	
