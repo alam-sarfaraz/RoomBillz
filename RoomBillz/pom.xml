@@ -18,14 +18,23 @@
 		<license/>
 	</licenses>
 	<developers>
-		 <developer>
-        <id>salam</id>
-        <name>Sarfaraz Alam</name>
-        <email>sarfarazalam2702@gmail.com</email>
-        <roles>
-            <role>Developer</role>
-        </roles>
-    </developer>
+		<developer>
+			<id>sarfarazalam</id>
+			<name>Sarfaraz Alam</name>
+			<email>sarfarazalam2702@gmail.com</email>
+			<url>https://www.linkedin.com/in/alam-sarfaraz/</url>
+			<organization>Freelance Software Engineer</organization>
+			<organizationUrl>https://github.com/alam-sarfaraz</organizationUrl>
+			<roles>
+				<role>Developer</role>
+				<role>Maintainer</role>
+			</roles>
+			<timezone>+05:30</timezone>
+			<properties>
+				<github>https://github.com/alam-sarfaraz</github>
+				<linkedin>https://www.linkedin.com/in/alam-sarfaraz/</linkedin>
+			</properties>
+		</developer>
 	</developers>
 	<scm>
 		<connection/>
