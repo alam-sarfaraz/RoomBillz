@@ -24,28 +24,28 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 20MB
-#Kafka Configuration      
+
+#Kafka Configuration
   kafka:
     bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    
     consumer:
-      group-id: roombillz-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: latest
       properties:
         spring.json.trusted.packages: "*"
 
-#Custom Kafka properties for topic and group mapping
+#Custom mapping to use in annotations/values
 kafka:
   topics:
     roomBillz: roomBillz-topic
     notification: roomBillz-notification-topic
   groups:
     roomBillz: roombillz-group
-    notification: roomBillz-notification-group      
+    notification: roomBillz-notification-group
 
 #File download path      
 invoice:

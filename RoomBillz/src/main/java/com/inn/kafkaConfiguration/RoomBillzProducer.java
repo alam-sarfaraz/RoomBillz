@@ -25,8 +25,9 @@ public class RoomBillzProducer {
 		this.kafkaTemplate = kafkaTemplate;
 	}
 
-	public void publishEvent(EventMessage message) {
+	public void eventPublisher(EventMessage message) {
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "eventPublisher");
 		kafkaTemplate.send(roomBillzKafkaTopic, message);
-		logger.info(RoomConstants.INSIDE_THE_METHOD + "publishEvent to RoomBillz Notification service:{}", kv("Message",message.getMessage()));
+		logger.info("Event Published to RoomBillz Notification service:{}", kv("Message",message.getMessage()));
 	}
 }
