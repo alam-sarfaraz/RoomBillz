@@ -13,6 +13,7 @@ public class EventMessage implements Serializable {
 
 	private String eventType;
 	private String message;
+	private String sourceService;
 	private String timestamp;
 
 }

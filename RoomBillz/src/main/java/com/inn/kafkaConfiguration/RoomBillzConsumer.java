@@ -19,7 +19,7 @@ public class RoomBillzConsumer {
 	@KafkaListener(topics = "${kafka.topics.notification}", groupId = "${kafka.groups.roomBillz}", containerFactory = "kafkaListenerContainerFactory")
 	public void eventListener(EventMessage message, Acknowledgment ack) {
 		logger.info(RoomConstants.INSIDE_THE_METHOD + "eventListener");
-		logger.info("Event received from Notification Service:{}",kv("Message", message.getMessage()));
+		logger.info("Event received from Notification Service:{}",kv("Message", message));
 		// process message...
 		ack.acknowledge();
 	}
