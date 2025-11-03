@@ -6,13 +6,13 @@ server:
 spring:
   application:
     name: ROOMBILLZ-SERVICE
-       
+
+#Database Configuration       
   datasource:
     url: jdbc:mysql://localhost:3306/roombillz
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -24,7 +24,30 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 20MB
-      
+#Kafka Configuration      
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    
+    consumer:
+      group-id: roombillz-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+#Custom Kafka properties for topic and group mapping
+kafka:
+  topics:
+    roomBillz: roomBillz-topic
+    notification: roomBillz-notification-topic
+  groups:
+    roomBillz: roombillz-group
+    notification: roomBillz-notification-group      
+
+#File download path      
 invoice:
     upload:
       path: "D:\\RoomBillz_Document\\Invoice\\"
@@ -34,7 +57,8 @@ download:
       path: "D:\\RoomBillz_Document\\ExcelReport\\"
     excelGroupReport:    
       path: "D:\\RoomBillz_Document\\ExcelGroupReport\\"
-    
+      
+#Acatuator Configuration    
 management:
   endpoints:
     web:
