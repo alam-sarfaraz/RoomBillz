@@ -6,7 +6,9 @@ server:
 spring:
   application:
     name: ROOMBILLZ-SERVICE
-
+  main:
+    allow-bean-definition-overriding: true
+    
 #Database Configuration       
   datasource:
     url: jdbc:mysql://localhost:3306/roombillz
@@ -51,6 +53,26 @@ kafka:
     roomBillz: roombillz-group
     notification: roomBillz-notification-group
 
+
+#Feign client configuration      
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: FULL
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+
+#Base URL of Notification Service (used by Feign)
+notification:
+  service:
+    url: http://localhost:8082/api/v1/notification
+          
 #File download path      
 invoice:
     upload:
@@ -62,12 +84,20 @@ download:
     excelGroupReport:    
       path: "D:\\RoomBillz_Document\\ExcelGroupReport\\"
       
+
+#Logging configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.openfeign: DEBUG
+    com.inn.client: DEBUG
+
 #Acatuator Configuration    
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health, info, beans, env, metrics
   endpoint:
     health:
       show-details: always
