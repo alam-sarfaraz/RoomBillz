@@ -92,14 +92,29 @@ logging:
     org.springframework.cloud.openfeign: DEBUG
     com.inn.client: DEBUG
 
-
+#Eureka configuration
 eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20
+
+    metadata-map:
+      version: v1
+      environment: LOCAL
+      region: IN
+
   client:
-    serviceUrl:
+    service-url:
       defaultZone: http://localhost:8761/eureka/
-      
-#Acatuator Configuration    
+    registry-fetch-interval-seconds: 5        # How often to fetch latest registry
+
 management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+#Acatuator Configuration
   endpoints:
     web:
       exposure:
