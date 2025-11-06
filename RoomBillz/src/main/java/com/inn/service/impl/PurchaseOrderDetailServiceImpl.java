@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,16 +42,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.inn.converter.JsonUtil;
 import com.inn.customException.PurchaseOrderNotFoundException;
 import com.inn.customException.RoomBillzException;
+import com.inn.dto.EventMessageDTO;
 import com.inn.dto.LineItemDetailDto;
+import com.inn.dto.PODetailEvent;
 import com.inn.dto.PurchaseOrderDetailDto;
 import com.inn.dto.ResponseDto;
+import com.inn.entity.EventMessage;
 import com.inn.entity.GroupDetail;
 import com.inn.entity.InvoiceDetail;
 import com.inn.entity.LineItemDetail;
 import com.inn.entity.PurchaseOrderDetail;
 import com.inn.entity.UserRegistration;
+import com.inn.kafkaConfiguration.RoomBillzProducer;
+import com.inn.repository.IEventMessageRepository;
 import com.inn.repository.IInvoiceDetailRepository;
 import com.inn.repository.ILineItemDetailRepository;
 import com.inn.repository.IPurchaseOrderDetailRepository;
@@ -86,11 +93,20 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	@Autowired
 	IGroupDetailService iGroupDetailService;
 	
+	@Autowired
+	IEventMessageRepository eventMessageRepository;
+	
+	@Autowired
+	RoomBillzProducer roomBillzProducer;
+	
 	@Value("${invoice.upload.path}")
 	private String basePath;
 	
 	@Value("${download.excelReport.path}")
 	private String excelBasePath;
+	
+	@Value("${spring.application.name}")
+	private String appName;
 
 	@Override
 	public ResponseEntity<ResponseDto> createPurchaseOrder(@Valid PurchaseOrderDetailDto purchaseOrderDetailDto,List<MultipartFile> invoiceFiles) {
@@ -145,7 +161,11 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        });
 
 			purchaseOrderDetail.setLineItemDetails(lineItemDetailList);
-			iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
+			PurchaseOrderDetail purchaseOrderDetailDb = iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
+			// Sending to kafka
+			PODetailEvent mapDataToPODetailEvent = mapDataToPODetailEvent(purchaseOrderDetailDb);
+			sendEventMessageToKafka(mapDataToPODetailEvent);
+			// End
 	       return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("201","Purchase Order saved Successfully."));
 		} catch (Exception e) {
 			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
@@ -221,6 +241,35 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 	        throw e;
 	    }
+	}
+	
+	public PODetailEvent mapDataToPODetailEvent(PurchaseOrderDetail purchaseOrderDetail) {
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "mapDataToPODetailEvent :");
+		PODetailEvent poDetailEvent = new PODetailEvent();
+		poDetailEvent.setPurchaseId(purchaseOrderDetail.getPurchaseId());
+		poDetailEvent.setPurchaseDate(purchaseOrderDetail.getPurchaseDate());
+		poDetailEvent.setUserName(purchaseOrderDetail.getUserName());
+		poDetailEvent.setFirstName(purchaseOrderDetail.getFirstName());
+		return poDetailEvent;
+	}
+	
+	public void sendEventMessageToKafka(PODetailEvent poDetailEvent) {
+
+	    // ✅ Save to DB
+	    EventMessage eventEntity = new EventMessage();
+	    eventEntity.setEventType("PURCHASE_ORDER_CREATED");
+	    eventEntity.setMessage(JsonUtil.toJson(poDetailEvent));
+	    eventEntity.setSourceService(appName);
+	    eventEntity.setTimestamp(LocalDateTime.now().toString());
+	   
+	    EventMessageDTO eventMessageDTO = new EventMessageDTO("PURCHASE_ORDER_CREATED",poDetailEvent,appName,LocalDateTime.now().toString());
+	    Boolean eventPublisher = roomBillzProducer.eventPublisher(eventMessageDTO);
+	    if(Boolean.TRUE.equals(eventPublisher)) {
+	    	eventEntity.setStatus("Success");
+	    }else {
+	    	eventEntity.setStatus("Failed");
+	    }
+	    eventMessageRepository.save(eventEntity);
 	}
 
 	@Override

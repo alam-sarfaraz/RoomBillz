@@ -18,7 +18,8 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConsumerAwareRebalanceListener;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.inn.dto.EventMessage;
+import com.inn.dto.EventMessageDTO;
+
 
 @EnableKafka
 @Configuration
@@ -43,8 +44,8 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean
-	public ConsumerFactory<String, EventMessage> consumerFactory() {
-		JsonDeserializer<EventMessage> deserializer = new JsonDeserializer<>(EventMessage.class);
+	public ConsumerFactory<String, EventMessageDTO> consumerFactory() {
+		JsonDeserializer<EventMessageDTO> deserializer = new JsonDeserializer<>(EventMessageDTO.class);
 		deserializer.addTrustedPackages("*");
 		deserializer.setUseTypeMapperForKey(true);
 		deserializer.setRemoveTypeHeaders(false);
@@ -53,8 +54,8 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean(name = "kafkaListenerContainerFactory")
-	public ConcurrentKafkaListenerContainerFactory<String, EventMessage> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, EventMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+	public ConcurrentKafkaListenerContainerFactory<String, EventMessageDTO> kafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, EventMessageDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 
 		// Manual acknowledgment
