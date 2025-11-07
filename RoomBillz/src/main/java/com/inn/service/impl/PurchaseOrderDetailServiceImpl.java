@@ -47,7 +47,7 @@ import com.inn.customException.PurchaseOrderNotFoundException;
 import com.inn.customException.RoomBillzException;
 import com.inn.dto.EventMessageDTO;
 import com.inn.dto.LineItemDetailDto;
-import com.inn.dto.PODetailEvent;
+import com.inn.dto.PurchaseOrderDetailNotificationEvent;
 import com.inn.dto.PurchaseOrderDetailDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.EventMessage;
@@ -163,7 +163,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 			purchaseOrderDetail.setLineItemDetails(lineItemDetailList);
 			PurchaseOrderDetail purchaseOrderDetailDb = iPurchaseOrderDetailRepository.save(purchaseOrderDetail);
 			// Sending to kafka
-			PODetailEvent mapDataToPODetailEvent = mapDataToPODetailEvent(purchaseOrderDetailDb);
+			PurchaseOrderDetailNotificationEvent mapDataToPODetailEvent = mapDataToPODetailNotificationEvent(purchaseOrderDetailDb);
 			sendEventMessageToKafka(mapDataToPODetailEvent);
 			// End
 	       return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("201","Purchase Order saved Successfully."));
@@ -243,32 +243,41 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    }
 	}
 	
-	public PODetailEvent mapDataToPODetailEvent(PurchaseOrderDetail purchaseOrderDetail) {
-		logger.info(RoomConstants.INSIDE_THE_METHOD + "mapDataToPODetailEvent :");
-		PODetailEvent poDetailEvent = new PODetailEvent();
+	public PurchaseOrderDetailNotificationEvent mapDataToPODetailNotificationEvent(PurchaseOrderDetail purchaseOrderDetail) {
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "mapDataToPODetailNotificationEvent :");
+		PurchaseOrderDetailNotificationEvent poDetailEvent = new PurchaseOrderDetailNotificationEvent();
+		poDetailEvent.setCreatedBy(purchaseOrderDetail.getCreatedBy());
+		poDetailEvent.setCreatedBy(purchaseOrderDetail.getCreatedBy());
 		poDetailEvent.setPurchaseId(purchaseOrderDetail.getPurchaseId());
 		poDetailEvent.setPurchaseDate(purchaseOrderDetail.getPurchaseDate());
 		poDetailEvent.setUserName(purchaseOrderDetail.getUserName());
 		poDetailEvent.setFirstName(purchaseOrderDetail.getFirstName());
+		poDetailEvent.setMiddleName(purchaseOrderDetail.getMiddleName());
+		poDetailEvent.setLastName(purchaseOrderDetail.getLastName());
+		poDetailEvent.setEmail(purchaseOrderDetail.getEmail());
+		poDetailEvent.setMobileNumber(purchaseOrderDetail.getMobileNumber());
+		poDetailEvent.setGroupName(purchaseOrderDetail.getGroupName());
+		poDetailEvent.setStatus(purchaseOrderDetail.getStatus());
+		poDetailEvent.setTotalPrice(purchaseOrderDetail.getTotalPrice());
+		poDetailEvent.setModeOfPayment(purchaseOrderDetail.getModeOfPayment());
+		poDetailEvent.setMonth(purchaseOrderDetail.getMonth());
 		return poDetailEvent;
 	}
 	
-	public void sendEventMessageToKafka(PODetailEvent poDetailEvent) {
-
+	public void sendEventMessageToKafka(PurchaseOrderDetailNotificationEvent poDetailEvent) {
+		logger.info(RoomConstants.INSIDE_THE_METHOD + "sendEventMessageToKafka:");
 	    // ✅ Save to DB
 	    EventMessage eventEntity = new EventMessage();
 	    eventEntity.setEventType("PURCHASE_ORDER_CREATED");
 	    eventEntity.setMessage(JsonUtil.toJson(poDetailEvent));
 	    eventEntity.setSourceService(appName);
 	    eventEntity.setTimestamp(LocalDateTime.now().toString());
-	   
+	    
+	    //Sent to kafka
 	    EventMessageDTO eventMessageDTO = new EventMessageDTO("PURCHASE_ORDER_CREATED",poDetailEvent,appName,LocalDateTime.now().toString());
-	    Boolean eventPublisher = roomBillzProducer.eventPublisher(eventMessageDTO);
-	    if(Boolean.TRUE.equals(eventPublisher)) {
-	    	eventEntity.setStatus("Success");
-	    }else {
-	    	eventEntity.setStatus("Failed");
-	    }
+	    
+	    Boolean sent = roomBillzProducer.eventPublisher(eventMessageDTO);
+	    eventEntity.setStatus(sent ? "Success" : "Failed");
 	    eventMessageRepository.save(eventEntity);
 	}
 

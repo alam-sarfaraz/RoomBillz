@@ -1,8 +1,7 @@
 package com.inn.dto;
 
 import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,15 +10,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PODetailEvent {
+public class PurchaseOrderDetailNotificationEvent {
+
+	private String createdBy;
+
+	private LocalDateTime createdAt;
 
 	private String purchaseId;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate purchaseDate;
 
 	private String userName;
-	
+
 	private String firstName;
 
 	private String middleName;
@@ -37,6 +39,6 @@ public class PODetailEvent {
 	private Double totalPrice;
 
 	private String modeOfPayment;
-	
+
 	private String month;
 }
