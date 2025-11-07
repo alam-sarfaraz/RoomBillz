@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class EventMessageDTO {
     
 	private String eventType;
-    private Object message;
+    private String message;
     private String sourceService;
     private String timestamp;
     

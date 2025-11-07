@@ -265,20 +265,21 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	}
 	
 	public void sendEventMessageToKafka(PurchaseOrderDetailNotificationEvent poDetailEvent) {
-		logger.info(RoomConstants.INSIDE_THE_METHOD + "sendEventMessageToKafka:");
+	    logger.info(RoomConstants.INSIDE_THE_METHOD + "sendEventMessageToKafka:");
+	    LocalDateTime now = LocalDateTime.now();
+	    String jsonMessage = JsonUtil.toJson(poDetailEvent);
 	    // ✅ Save to DB
 	    EventMessage eventEntity = new EventMessage();
 	    eventEntity.setEventType("PURCHASE_ORDER_CREATED");
-	    eventEntity.setMessage(JsonUtil.toJson(poDetailEvent));
+	    eventEntity.setMessage(jsonMessage);
 	    eventEntity.setSourceService(appName);
-	    eventEntity.setTimestamp(LocalDateTime.now().toString());
-	    
-	    //Sent to kafka
-	    EventMessageDTO eventMessageDTO = new EventMessageDTO("PURCHASE_ORDER_CREATED",poDetailEvent,appName,LocalDateTime.now().toString());
-	    
+	    eventEntity.setTimestamp(now.toString());
+	    // ✅ Sent to Kafka as JSON
+	    EventMessageDTO eventMessageDTO = new EventMessageDTO("PURCHASE_ORDER_CREATED",jsonMessage,appName,now.toString());
 	    Boolean sent = roomBillzProducer.eventPublisher(eventMessageDTO);
 	    eventEntity.setStatus(sent ? "Success" : "Failed");
 	    eventMessageRepository.save(eventEntity);
+	    logger.info("✅ Event Saved and Published Status: {}", sent ? "Success" : "Failed");
 	}
 
 	@Override
