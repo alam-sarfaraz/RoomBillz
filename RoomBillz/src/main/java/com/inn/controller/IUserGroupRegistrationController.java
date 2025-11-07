@@ -113,5 +113,14 @@ public interface IUserGroupRegistrationController {
 	ResponseEntity<byte[]> exportUserGroupDetailMappingByUsername(@Parameter(description = "Username associated with the User Group Detail Mapping", example = "sarfarazalam") 
 	                                                              @RequestParam(name = "username") String username);
 
+	@Operation(summary = "Get User List by Group Name", description = "Returns a list of usernames associated with the given group name.")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Successfully fetched user list",content = @Content(mediaType = "application/json")),
+			@ApiResponse(responseCode = "400", description = "Invalid group name provided", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			@ApiResponse(responseCode = "404", description = "Group not found", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping(path = "/getUserListByGroupName", produces = {MediaType.APPLICATION_JSON_VALUE})
+	ResponseEntity<List<String>> getUserListByGroupName(@Parameter(description = "Group Name", example = "RoomBillz") @RequestParam(name = "groupName") String groupName);
+
 
 }

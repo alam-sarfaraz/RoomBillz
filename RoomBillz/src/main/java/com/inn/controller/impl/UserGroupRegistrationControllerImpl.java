@@ -110,4 +110,16 @@ public class UserGroupRegistrationControllerImpl implements IUserGroupRegistrati
 		}
 	}
 
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<List<String>> getUserListByGroupName(String groupName) {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "getUserListByGroupName {}",kv("GroupName",groupName));
+			return iUserGroupRegistrationService.getUserListByGroupName(groupName);
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
 }

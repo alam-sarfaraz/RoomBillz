@@ -24,4 +24,6 @@ public interface IUserGroupRegistrationService {
 
 	public ResponseEntity<byte[]> exportUserGroupDetailMappingByUsername(String username);
 
+	public ResponseEntity<List<String>> getUserListByGroupName(String groupName);
+
 }
