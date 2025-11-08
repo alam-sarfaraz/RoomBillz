@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.inn.client.IEventMessageNotificationClient;
+import com.inn.dto.EventMessageCreateRequestDto;
+import com.inn.dto.EventMessageCreateRequestDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.EventMessage;
 import com.inn.repository.IEventMessageRepository;
@@ -22,12 +25,15 @@ public class EventMessageServiceImpl implements IEventMessageService {
 	
 	@Autowired
 	IEventMessageRepository eventMessageRepository;
+	
+	@Autowired
+	IEventMessageNotificationClient eventMessageNotificationClient;
 
 	@Override
 	public EventMessage findEarliestFailedEvent() {
 		logger.info(RoomConstants.INSIDE_THE_METHOD +"findEarliestFailedEvent");
 		try {
-			return eventMessageRepository.findFirstByStatusOrderByCreatedAtAsc("Failed").orElse(null);
+			return eventMessageRepository.findFirstByStatusOrderByCreatedAtAsc(RoomConstants.FAILED).orElse(null);
 		} catch (Exception e) {
 			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 			throw e;
@@ -62,9 +68,16 @@ public class EventMessageServiceImpl implements IEventMessageService {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .body(new ResponseDto("404", "No failed EventMessage found to send."));
 	        }
-
 	        Integer id = earliestFailedEvent.getId();
-	        this.updateEventMessageByStatus(id, "Success");
+	        this.updateEventMessageByStatus(id, RoomConstants.SUCCESS);
+	        EventMessageCreateRequestDto eventMessageCreateRequestDto = new EventMessageCreateRequestDto();
+	        eventMessageCreateRequestDto.setId(id);
+	        eventMessageCreateRequestDto.setEventType(earliestFailedEvent.getEventType());
+	        eventMessageCreateRequestDto.setMessage(earliestFailedEvent.getMessage());
+	        eventMessageCreateRequestDto.setSourceService(earliestFailedEvent.getSourceService());
+	        eventMessageCreateRequestDto.setTimestamp(earliestFailedEvent.getTimestamp());
+	        eventMessageCreateRequestDto.setStatus(RoomConstants.FAILED);
+	        eventMessageNotificationClient.createEvent(eventMessageCreateRequestDto);
 	        return ResponseEntity.ok(new ResponseDto("200", "EventMessage sent to Notification Service successfully."));
 	    } catch (Exception e) {
 	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);
