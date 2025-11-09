@@ -270,6 +270,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    String jsonMessage = JsonUtil.toJson(poDetailEvent);
 	    // ✅ Save to DB
 	    EventMessage eventEntity = new EventMessage();
+	    eventEntity.setPurchaseId(poDetailEvent.getPurchaseId());
 	    eventEntity.setEventType("PURCHASE_ORDER_CREATED");
 	    eventEntity.setMessage(jsonMessage);
 	    eventEntity.setSourceService(appName);

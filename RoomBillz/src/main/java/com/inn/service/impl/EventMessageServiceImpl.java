@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.inn.client.IEventMessageNotificationClient;
 import com.inn.dto.EventMessageCreateRequestDto;
-import com.inn.dto.EventMessageCreateRequestDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.EventMessage;
 import com.inn.repository.IEventMessageRepository;
@@ -69,15 +68,16 @@ public class EventMessageServiceImpl implements IEventMessageService {
 	                    .body(new ResponseDto("404", "No failed EventMessage found to send."));
 	        }
 	        Integer id = earliestFailedEvent.getId();
-	        this.updateEventMessageByStatus(id, RoomConstants.SUCCESS);
 	        EventMessageCreateRequestDto eventMessageCreateRequestDto = new EventMessageCreateRequestDto();
 	        eventMessageCreateRequestDto.setId(id);
+	        eventMessageCreateRequestDto.setPurchaseId(earliestFailedEvent.getPurchaseId());
 	        eventMessageCreateRequestDto.setEventType(earliestFailedEvent.getEventType());
 	        eventMessageCreateRequestDto.setMessage(earliestFailedEvent.getMessage());
 	        eventMessageCreateRequestDto.setSourceService(earliestFailedEvent.getSourceService());
 	        eventMessageCreateRequestDto.setTimestamp(earliestFailedEvent.getTimestamp());
 	        eventMessageCreateRequestDto.setStatus(RoomConstants.FAILED);
 	        eventMessageNotificationClient.createEvent(eventMessageCreateRequestDto);
+	        this.updateEventMessageByStatus(id, RoomConstants.SUCCESS);
 	        return ResponseEntity.ok(new ResponseDto("200", "EventMessage sent to Notification Service successfully."));
 	    } catch (Exception e) {
 	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()), e);

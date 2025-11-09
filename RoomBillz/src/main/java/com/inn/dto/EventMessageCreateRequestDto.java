@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class EventMessageCreateRequestDto implements Serializable{
 
 	private Integer id;
+	
+	private String purchaseId;
 
 	private String eventType;
 
