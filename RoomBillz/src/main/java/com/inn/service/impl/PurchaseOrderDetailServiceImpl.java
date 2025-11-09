@@ -685,7 +685,7 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        if (purchaseOrderDetail == null) {
 	            throw new PurchaseOrderNotFoundException("Purchase Order Detail", "PurchaseId", purchaseId);
 	        }
-	        List<String> validStatusList = Arrays.asList(RoomConstants.PENDING,RoomConstants.REJECTED,RoomConstants.APPROVED,RoomConstants.PARTIALLY_APPROVED);
+	        List<String> validStatusList = Arrays.asList(RoomConstants.PENDING,RoomConstants.REJECTED,RoomConstants.APPROVED,RoomConstants.PARTIALLY_APPROVED,RoomConstants.WAITING_FOR_APPROVAL);
 	        if (!validStatusList.contains(status)) {
 	            throw new RoomBillzException("Invalid status provided: " + status);
 	        }
