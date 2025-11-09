@@ -12,5 +12,7 @@ public interface IEventMessageRepository extends JpaRepository<EventMessage, Int
 	
     Optional<EventMessage> findFirstByStatusOrderByCreatedAtAsc(String status);
 
+	Optional<EventMessage> findByPurchaseId(String purchaseId);
+
 
 }

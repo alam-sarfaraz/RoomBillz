@@ -54,6 +54,8 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate();
 
+	public ResponseEntity<ResponseDto> sendMissingPurchaseOrderDetailToNotificationService();
+
 	
 
 }

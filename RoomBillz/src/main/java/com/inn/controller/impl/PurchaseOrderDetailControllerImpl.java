@@ -283,4 +283,17 @@ public class PurchaseOrderDetailControllerImpl implements IPurchaseOrderDetailCo
 		}
 	}
 
+
+	@Override
+	@LogRequestResponse
+	public ResponseEntity<ResponseDto> sendMissingPurchaseOrderDetailToNotificationService() {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "sendMissingPurchaseOrderDetailToNotificationService");
+			return iPurchaseOrderDetailService.sendMissingPurchaseOrderDetailToNotificationService();
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
+
 }

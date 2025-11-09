@@ -245,6 +245,15 @@ public interface IPurchaseOrderDetailController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
 	@GetMapping(path = "/getPurchaseOrderDetailsByCreatedDate", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate();
+	
+	@Operation(summary = "Send missing Purchase Order details to Notification Service", description = "Finds the earliest failed purchase order detail and sends it to the Notification Service.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Missing Purchase Order detail sent successfully", content = @Content(mediaType = "application/json")),
+			@ApiResponse(responseCode = "404", description = "No missing Purchase Order detail found", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@GetMapping(path = "/sendMissingPurchaseOrderDetailToNotificationService", produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<ResponseDto> sendMissingPurchaseOrderDetailToNotificationService();
+
 
 
 

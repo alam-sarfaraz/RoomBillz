@@ -47,8 +47,8 @@ import com.inn.customException.PurchaseOrderNotFoundException;
 import com.inn.customException.RoomBillzException;
 import com.inn.dto.EventMessageDTO;
 import com.inn.dto.LineItemDetailDto;
-import com.inn.dto.PurchaseOrderDetailNotificationEvent;
 import com.inn.dto.PurchaseOrderDetailDto;
+import com.inn.dto.PurchaseOrderDetailNotificationEvent;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.EventMessage;
 import com.inn.entity.GroupDetail;
@@ -718,7 +718,50 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	    }
 	}
 
+	@Override
+	public ResponseEntity<ResponseDto> sendMissingPurchaseOrderDetailToNotificationService() {
+	    logger.info(RoomConstants.INSIDE_THE_METHOD + "sendMissingPurchaseOrderDetailToNotificationService");
 
+	    try {
+	        List<PurchaseOrderDetail> purchaseOrderDetailList = iPurchaseOrderDetailRepository.findByStatus(RoomConstants.PENDING);
+	        if (purchaseOrderDetailList == null || purchaseOrderDetailList.isEmpty()) {
+	            logger.warn("No PurchaseOrderDetail found with PENDING status");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("404", "No missing Purchase Order detail found"));
+	        }
+	        int createdCount = 0;
+	        for (PurchaseOrderDetail purchaseOrderDetail : purchaseOrderDetailList) {
 
-	
+	            PurchaseOrderDetailNotificationEvent poDetailEvent = mapDataToPODetailNotificationEvent(purchaseOrderDetail);
+
+	            Optional<EventMessage> eventMessageOpt = eventMessageRepository.findByPurchaseId(poDetailEvent.getPurchaseId());
+
+	            if (eventMessageOpt.isPresent()) {
+	                // Record already exists → update status to FAILED
+	                EventMessage eventMessageDB = eventMessageOpt.get();
+	                eventMessageDB.setStatus(RoomConstants.FAILED);
+	                eventMessageRepository.save(eventMessageDB);
+	                continue;
+	            }
+	            // Create new EventMessage
+	            LocalDateTime now = LocalDateTime.now();
+	            String jsonMessage = JsonUtil.toJson(poDetailEvent);
+	            EventMessage eventEntity = new EventMessage();
+	            eventEntity.setPurchaseId(poDetailEvent.getPurchaseId());
+	            eventEntity.setEventType("PURCHASE_ORDER_CREATED");
+	            eventEntity.setMessage(jsonMessage);
+	            eventEntity.setSourceService(appName);
+	            eventEntity.setTimestamp(now.toString());
+	            eventEntity.setStatus(RoomConstants.FAILED);
+	            eventMessageRepository.save(eventEntity);
+	            createdCount++;
+	        }
+	        logger.info("Created {} new EventMessage record(s); Total PENDING PurchaseOrderDetails processed: {}",createdCount, purchaseOrderDetailList.size());
+	        return ResponseEntity.ok(new ResponseDto("200", "Missing Purchase Order detail(s) processed successfully"));
+
+	    } catch (Exception e) {
+	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDto("500", "Failed due to internal server error"));
+	    }
+	}
+
 }
