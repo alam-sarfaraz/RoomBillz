@@ -13,6 +13,7 @@ import com.inn.client.IEventMessageNotificationClient;
 import com.inn.dto.EventMessageCreateRequestDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.EventMessage;
+import com.inn.logs.LogRequestResponse;
 import com.inn.repository.IEventMessageRepository;
 import com.inn.roomConstants.RoomConstants;
 import com.inn.service.IEventMessageService;
@@ -85,6 +86,16 @@ public class EventMessageServiceImpl implements IEventMessageService {
 	    }
 	}
 
-
+	@Override
+	public ResponseEntity<ResponseDto> deleteAllEventMessage() {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteAllEventMessage :");
+			eventMessageRepository.deleteAll();
+			return ResponseEntity.ok(new ResponseDto("200", "EventMessage deleted successfully."));
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
+	}
 
 }

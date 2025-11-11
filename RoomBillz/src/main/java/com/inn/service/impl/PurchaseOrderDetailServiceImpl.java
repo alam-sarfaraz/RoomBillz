@@ -57,6 +57,7 @@ import com.inn.entity.LineItemDetail;
 import com.inn.entity.PurchaseOrderDetail;
 import com.inn.entity.UserRegistration;
 import com.inn.kafkaConfiguration.RoomBillzProducer;
+import com.inn.logs.LogRequestResponse;
 import com.inn.repository.IEventMessageRepository;
 import com.inn.repository.IInvoiceDetailRepository;
 import com.inn.repository.ILineItemDetailRepository;
@@ -762,6 +763,18 @@ public class PurchaseOrderDetailServiceImpl implements IPurchaseOrderDetailServi
 	        logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDto("500", "Failed due to internal server error"));
 	    }
+	}
+	
+	@Override
+	public ResponseEntity<ResponseDto> deleteAllPurchaseOrderDetails() {
+		try {
+			logger.info(RoomConstants.INSIDE_THE_METHOD + "deleteAllPurchaseOrderDetails");
+			iPurchaseOrderDetailRepository.deleteAll();
+			return ResponseEntity.ok(new ResponseDto("200", "Purchase Order detail(s) deleted processed successfully"));
+		} catch (Exception e) {
+			logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO, kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+			throw e;
+		}
 	}
 
 }

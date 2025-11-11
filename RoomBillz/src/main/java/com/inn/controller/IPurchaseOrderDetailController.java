@@ -253,8 +253,15 @@ public interface IPurchaseOrderDetailController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
 	@GetMapping(path = "/sendMissingPurchaseOrderDetailToNotificationService", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<ResponseDto> sendMissingPurchaseOrderDetailToNotificationService();
+	
+	
 
-
+	@Operation(summary = "Delete all Purchase Order Details", description = "Deletes all Purchase Order Details from the system")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "All Purchase Order Details deleted successfully"),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))) })
+	@DeleteMapping(path = "/delete-all", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResponseDto> deleteAllPurchaseOrderDetails();
 
 
 }

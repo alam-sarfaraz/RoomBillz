@@ -56,6 +56,8 @@ public interface IPurchaseOrderDetailService {
 
 	public ResponseEntity<ResponseDto> sendMissingPurchaseOrderDetailToNotificationService();
 
+	public ResponseEntity<ResponseDto> deleteAllPurchaseOrderDetails();
+
 	
 
 }
