@@ -290,4 +290,17 @@ public class UserGroupRegistrationServiceImpl implements IUserGroupRegistrationS
 			}
 		}
 
+		@Override
+		public ResponseEntity<List<String>> getEmailListByGroupName(String groupName) {
+			try {
+				logger.info(RoomConstants.INSIDE_THE_METHOD + "getEmailListByGroupName {}",kv("GroupName",groupName));
+				ResponseEntity<List<UserGroupDetailMapping>> userGroupDetailList = this.findUserGroupDetailByGroupName(groupName);
+				List<String> userList = userGroupDetailList.getBody().stream().map(e->e.getEmail()).collect(Collectors.toList());
+				return ResponseEntity.status(HttpStatus.OK).body(userList); 
+			} catch (Exception e) {
+				logger.error(RoomConstants.ERROR_OCCURRED_DUE_TO,kv(RoomConstants.ERROR_MESSAGE, e.getMessage()));
+				throw e;
+			}
+		}
+
 }

@@ -26,4 +26,6 @@ public interface IUserGroupRegistrationService {
 
 	public ResponseEntity<List<String>> getUserListByGroupName(String groupName);
 
+	public ResponseEntity<List<String>> getEmailListByGroupName(String groupName);
+
 }
