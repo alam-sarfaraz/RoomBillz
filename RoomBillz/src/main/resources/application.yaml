@@ -55,9 +55,11 @@ kafka:
   topics:
     roomBillz: roomBillz-topic
     notification: roomBillz-notification-topic
+    document: roomBillz-document-topic
   groups:
     roomBillz: roombillz-group
     notification: roomBillz-notification-group
+    document: roomBillz-document-group
 
 # ==============================
 # FEIGN CLIENT CONFIG
@@ -76,13 +78,15 @@ feign:
       enabled: true
 
 # ==============================
-# NOTIFICATION SERVICE BASE URL
-# LOCAL + DOCKER
+# NOTIFICATION SERVICE BASE URL ADDED (LOCAL + DOCKER)
 # ==============================
 notification:
   service:
     url: http://${NOTIFICATION_HOST:localhost}:8082/api/v1/notification
 
+# ===================================
+# DOCUMENT SERVICE URL ADDED (LOCAL + DOCKER)
+# ===================================
 document:
   service:
     url: http://${DOCUMENT_HOST:localhost}:8084/api/v1/document
