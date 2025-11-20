@@ -2,29 +2,25 @@ server:
   port: 8081
   servlet:
     context-path: /api/v1/roomBillz
-
+    
 spring:
   application:
     name: ROOMBILLZ-SERVICE
-
   main:
     allow-bean-definition-overriding: true
-
-  # ==============================
-  # DATABASE CONFIG (LOCAL + DOCKER)
-  # ==============================
+    
+#Database Configuration       
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/roombillz
-    username: ${DB_USER:root}
-    password: ${DB_PASSWORD:root}
+    url: jdbc:mysql://localhost:3306/roombillz
+    username: root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
+ 
   servlet:
     multipart:
       enabled: true
@@ -35,11 +31,9 @@ spring:
     compatibility-verifier:
       enabled: false
 
-  # ==============================
-  # KAFKA CONFIG (LOCAL + DOCKER)
-  # ==============================
+#Kafka Configuration
   kafka:
-    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -50,7 +44,7 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
 
-# Custom topics and groups
+#Custom mapping to use in annotations/values
 kafka:
   topics:
     roomBillz: roomBillz-topic
@@ -59,9 +53,8 @@ kafka:
     roomBillz: roombillz-group
     notification: roomBillz-notification-group
 
-# ==============================
-# FEIGN CLIENT CONFIG
-# ==============================
+
+#Feign client configuration      
 feign:
   client:
     config:
@@ -75,48 +68,36 @@ feign:
     response:
       enabled: true
 
-# ==============================
-# NOTIFICATION SERVICE BASE URL
-# LOCAL + DOCKER
-# ==============================
+#Base URL of Notification Service (used by Feign)
 notification:
   service:
-    url: http://${NOTIFICATION_HOST:localhost}:8082/api/v1/notification
-
-document:
-  service:
-    url: http://${DOCUMENT_HOST:localhost}:8084/api/v1/document
-    
-# ==============================
-# FILE PATHS (LOCAL WINDOWS + DOCKER OVERRIDE)
-# ==============================
+    url: http://localhost:8082/api/v1/notification
+          
+#File download path      
 invoice:
-  upload:
-    path: ${INVOICE_PATH:D:\\RoomBillz_Document\\Invoice\\}
-
+    upload:
+      path: "D:\\RoomBillz_Document\\Invoice\\"
+      
 download:
-  excelReport:
-    path: ${EXCEL_REPORT_PATH:D:\\RoomBillz_Document\\ExcelReport\\}
+    excelReport:    
+      path: "D:\\RoomBillz_Document\\ExcelReport\\"
+    excelGroupReport:    
+      path: "D:\\RoomBillz_Document\\ExcelGroupReport\\"
+      
 
-  excelGroupReport:
-    path: ${EXCEL_GROUP_PATH:D:\\RoomBillz_Document\\ExcelGroupReport\\}
-
-# ==============================
-# LOGGING
-# ==============================
+#Logging configuration
 logging:
   level:
     root: INFO
     org.springframework.cloud.openfeign: DEBUG
     com.inn.client: DEBUG
 
-# ==============================
-# EUREKA CONFIG (LOCAL + DOCKER)
-# ==============================
+#Eureka configuration
 eureka:
   instance:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 20
+
     metadata-map:
       version: v1
       environment: LOCAL
@@ -124,12 +105,9 @@ eureka:
 
   client:
     service-url:
-      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
-    registry-fetch-interval-seconds: 5
+      defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5        # How often to fetch latest registry
 
-# ==============================
-# ACTUATOR CONFIG
-# ==============================
 management:
   health:
     livenessstate:
@@ -137,17 +115,18 @@ management:
     readinessstate:
       enabled: true
 
+#Acatuator Configuration
   endpoints:
     web:
       exposure:
-        include: health, info, beans, env, metrics, prometheus
-
+        include: health, info, beans, env, metrics,prometheus
   endpoint:
     health:
       show-details: always
     prometheus:
       enabled: true
-
   metrics:
     tags:
       application: ${spring.application.name}
+            
+
