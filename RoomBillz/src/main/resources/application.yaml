@@ -14,7 +14,7 @@ spring:
   # DATABASE CONFIG (LOCAL + DOCKER)
   # ==============================
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/roombillz
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/roombillz
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
