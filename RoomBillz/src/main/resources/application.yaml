@@ -6,7 +6,10 @@ server:
 spring:
   application:
     name: ROOMBILLZ-SERVICE
-
+    
+  profiles:
+    active: local
+    
   main:
     allow-bean-definition-overriding: true
 
