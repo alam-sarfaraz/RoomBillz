@@ -1,10 +1,12 @@
 package com.inn.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -71,4 +73,11 @@ public class UserRegistrationDto {
     @NotEmpty(message = "Alternate Mobile Number can not be a null or empty")
     @Pattern(regexp = "(^$|[0-9]{10})", message = "Alternate Mobile Number must be 10 digits")
     private String atlMobileNumber;
+    
+    @NotNull(message = "Roles must not be null")
+    @NotEmpty(message = "At least one role must be provided")
+    @Schema(description = "List of roles assigned to the user",
+            example = "[\"USER\", \"ADMIN\"]",
+            allowableValues = {"USER", "ADMIN"})   
+    private List<String> roles;
 }

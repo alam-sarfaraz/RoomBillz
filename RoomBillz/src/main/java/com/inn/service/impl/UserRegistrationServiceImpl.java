@@ -4,6 +4,7 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import com.inn.customException.UserAlreadyExistException;
 import com.inn.customException.UserNotFoundException;
 import com.inn.dto.ResponseDto;
 import com.inn.dto.UserRegistrationDto;
+import com.inn.entity.RoleDetail;
 import com.inn.entity.UserRegistration;
 import com.inn.repository.IUserRegistrationRepository;
 import com.inn.roomConstants.RoomConstants;
@@ -59,24 +61,46 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService{
 		}
 	}
 	
-	public UserRegistration mapToUserRegistration(UserRegistrationDto userRegistrationDto,UserRegistration userRegistration){
-		logger.info(RoomConstants.INSIDE_THE_METHOD + "mapToUserRegistration {}",kv("UserRegistrationDto",userRegistrationDto));
-		userRegistration.setUserName(userRegistrationDto.getUserName());
-		userRegistration.setUserId(RoomUtility.generateUserId(userRegistrationDto.getFirstName(), userRegistrationDto.getLastName()));
-		userRegistration.setFirstName(userRegistrationDto.getFirstName());
-		userRegistration.setMiddleName(userRegistrationDto.getMiddleName());
-		userRegistration.setLastName(userRegistrationDto.getLastName());
-		userRegistration.setEmail(userRegistrationDto.getEmail());
-		userRegistration.setConfirmEmail(userRegistrationDto.getConfirmEmail());
-		userRegistration.setPassword(userRegistrationDto.getPassword());
-		userRegistration.setConfirmPassword(userRegistrationDto.getConfirmPassword());
-		userRegistration.setDob(userRegistrationDto.getDob());
-		userRegistration.setGender(userRegistrationDto.getGender());
-		userRegistration.setMobileNumber(userRegistrationDto.getMobileNumber());
-		userRegistration.setAtlMobileNumber(userRegistrationDto.getAtlMobileNumber());
-		userRegistration.setIsActive(Boolean.TRUE);
-		return userRegistration;
+	public UserRegistration mapToUserRegistration(
+	        UserRegistrationDto dto,
+	        UserRegistration user) {
+
+	    logger.info(RoomConstants.INSIDE_THE_METHOD + "mapToUserRegistration",
+	            kv("UserRegistrationDto", dto));
+
+	    user.setUserName(dto.getUserName());
+	    user.setUserId(RoomUtility.generateUserId(
+	            dto.getFirstName(), dto.getLastName()));
+	    user.setFirstName(dto.getFirstName());
+	    user.setMiddleName(dto.getMiddleName());
+	    user.setLastName(dto.getLastName());
+	    user.setEmail(dto.getEmail());
+	    user.setConfirmEmail(dto.getConfirmEmail());
+	    user.setPassword(dto.getPassword());
+	    user.setConfirmPassword(dto.getConfirmPassword());
+	    user.setDob(dto.getDob());
+	    user.setGender(dto.getGender());
+	    user.setMobileNumber(dto.getMobileNumber());
+	    user.setAtlMobileNumber(dto.getAtlMobileNumber());
+	    user.setIsActive(Boolean.TRUE);
+
+	    if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
+	    	
+	        List<RoleDetail> roleDetails = dto.getRoles().stream()
+	                .map(roleName -> {
+	                    RoleDetail role = new RoleDetail();
+	                    role.setRoleName(roleName);
+	                    role.setUserRegistration(user); 
+	                    return role; 
+	                })
+	                .collect(Collectors.toList());
+
+	        user.setRoles(roleDetails);
+	    }
+	    return user;
 	}
+
+
 
 	@Override
 	public UserRegistration findById(Integer id) {
