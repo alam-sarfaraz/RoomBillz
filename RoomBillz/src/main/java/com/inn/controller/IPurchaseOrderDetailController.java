@@ -246,7 +246,7 @@ public interface IPurchaseOrderDetailController {
 	@GetMapping(path = "/getPurchaseOrderDetailsByCreatedDate", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<PurchaseOrderDetail> getPurchaseOrderDetailsByCreatedDate();
 	
-	@Operation(summary = "Send missing Purchase Order details to Notification Service", description = "Finds the earliest failed purchase order detail and sends it to the Notification Service.")
+	@Operation(summary = "Send missing Purchase Order details to Notification Service (via scheduler)", description = "Finds the earliest failed purchase order detail and sends it to the Notification Service.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Missing Purchase Order detail sent successfully", content = @Content(mediaType = "application/json")),
 			@ApiResponse(responseCode = "404", description = "No missing Purchase Order detail found", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),

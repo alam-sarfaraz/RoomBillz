@@ -57,7 +57,6 @@ import com.inn.entity.LineItemDetail;
 import com.inn.entity.PurchaseOrderDetail;
 import com.inn.entity.UserRegistration;
 import com.inn.kafkaConfiguration.RoomBillzProducer;
-import com.inn.logs.LogRequestResponse;
 import com.inn.repository.IEventMessageRepository;
 import com.inn.repository.IInvoiceDetailRepository;
 import com.inn.repository.ILineItemDetailRepository;

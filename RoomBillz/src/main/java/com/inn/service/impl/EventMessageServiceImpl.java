@@ -13,7 +13,6 @@ import com.inn.client.IEventMessageNotificationClient;
 import com.inn.dto.EventMessageCreateRequestDto;
 import com.inn.dto.ResponseDto;
 import com.inn.entity.EventMessage;
-import com.inn.logs.LogRequestResponse;
 import com.inn.repository.IEventMessageRepository;
 import com.inn.roomConstants.RoomConstants;
 import com.inn.service.IEventMessageService;
