@@ -122,6 +122,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		errorResponseDto.setErrorTime(LocalDateTime.now());
 		return new ResponseEntity<>(errorResponseDto,HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(InvalidCredentialsException.class)
+	public ResponseEntity<ErrorResponseDto> handleInvalidCredentialsException(InvalidCredentialsException invalidCredentialsException,WebRequest webRequest){
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+		errorResponseDto.setApipath(webRequest.getDescription(false));
+		errorResponseDto.setErrorCode(HttpStatus.UNAUTHORIZED);
+		errorResponseDto.setErrorMessage(invalidCredentialsException.getMessage());
+		errorResponseDto.setErrorTime(LocalDateTime.now());
+		return new ResponseEntity<>(errorResponseDto,HttpStatus.UNAUTHORIZED);
+	}
 
 	
 }
