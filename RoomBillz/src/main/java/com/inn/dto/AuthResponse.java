@@ -14,6 +14,7 @@ public class AuthResponse {
     private String middleName;
     private String lastName;
     private String email;
+    private String password;
     private Boolean isActive;
     private List<RoleDTO> roles;
 }

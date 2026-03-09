@@ -48,6 +48,7 @@ public class LoginRequestServiceImpl implements ILoginRequestService {
 	            response.setMiddleName(user.getMiddleName());
 	            response.setLastName(user.getLastName());
 	            response.setEmail(user.getEmail());
+	            response.setPassword(user.getPassword());
 	            response.setIsActive(user.getIsActive());
 
 	            List<RoleDTO> roles = user.getRoles()
